@@ -1,0 +1,31 @@
+* {
+    padding: 0px;
+    margin: 0px;
+    text-decoration: none;
+    list-style-type: none;
+    border: none;
+    box-sizing: border-box;
+    /* border: red;
+    border-style: solid; */
+}
+
+.btn {
+    background-color: red;
+    padding: 48px 16px;
+    border-radius: 50%;
+    border: 5px outset black;
+
+    span {
+        color: black;
+        font-weight: bold;
+        text-shadow: 
+            1px 1px 0px white,  
+            -1px -1px 0px white,  
+            1px -1px 0px white,  
+            -1px 1px 0px white;
+    }
+}
+
+.shop {
+    width: 60px;
+}
