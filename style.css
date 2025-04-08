@@ -1,0 +1,9 @@
+header{
+    display: flex;
+    justify-content: center;
+}
+#main-click-area{
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}

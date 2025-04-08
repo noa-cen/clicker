@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>ClickCLick</title>
+</head>
+<body>
+
+  <header>
+    <h1>Révolution Clicker</h1>
+  </header>
+
+  <main>
+    <!-- Section compteur + bouton principal -->
+    <section id="main-click-area">
+      <p>Révolutionnaires : <span id="counter">0</span></p>
+      <button id="bouton">Rallier un révolutionnaire</button>
+    </section>
+
+    <!-- Section d'améliorations (automatiques ou upgrades) -->
+    <section id="upgrade-container" class="upgrade-section">
+      <h2>Améliorations</h2>
+      <!-- Les boutons d’upgrades JS s’ajoutent ici -->
+    </section>
+
+    <!-- Section spéciale : recruteurs, propagandistes, stats -->
+    <section id="special-upgrades" class="special-section">
+      <h2>Recrutement et Propagande</h2>
+
+      <div id="recruiter-count">Recruteurs : <span id="recruiter-value">0</span></div>
+      <button id="buy-recruiter">Recruter (Coût: ...)</button>
+
+      <div id="propagandist-count">Propagandistes : <span id="propagandist-value">0</span></div>
+      <button id="buy-propagandist">Former un propagandiste (Coût: ...)</button>
+
+      <div id="stats" class="stats">
+        <!-- Les stats s’affichent ici -->
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <button id="reset-button" class="reset-button">Réinitialiser la révolution</button>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
