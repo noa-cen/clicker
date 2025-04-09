@@ -1,0 +1,80 @@
+[
+    {
+      "id": "tract",
+      "label": "Acheter Tract (10 Révolutionnaires)",
+      "cost": 10,
+      "type": "autoclick",
+      "interval": 5000,
+      "amount": 1
+    },
+    {
+      "id": "affiche",
+      "label": "Acheter Affiche (50 Révolutionnaires)",
+      "cost": 50,
+      "type": "autoclick",
+      "interval": 1000,
+      "amount": 1
+    },
+    {
+      "id": "megaphone",
+      "label": "Acheter Mégaphone (100 Révolutionnaires)",
+      "cost": 100,
+      "type": "clickPower",
+      "power": 2
+    },
+    {
+      "id": "manif",
+      "label": "Acheter Manif éclair (250 Révolutionnaires)",
+      "cost": 250,
+      "type": "autoclick",
+      "interval": 1000,
+      "amount": 5
+    },
+    {
+      "id": "comite",
+      "label": "Acheter Comité local (500 Révolutionnaires)",
+      "cost": 500,
+      "type": "autoclick",
+      "interval": 1000,
+      "amount": 10
+    },
+    {
+      "id": "reseau",
+      "label": "Acheter Réseau militant (1000 Révolutionnaires)",
+      "cost": 1000,
+      "type": "clickPower",
+      "power": 10
+    },
+    {
+      "id": "greve",
+      "label": "Acheter Grève générale (1500 Révolutionnaires)",
+      "cost": 1500,
+      "type": "autoclick",
+      "interval": 1000,
+      "amount": 25
+    },
+    {
+      "id": "radio",
+      "label": "Acheter Radio pirate (2000 Révolutionnaires)",
+      "cost": 2000,
+      "type": "autoclick",
+      "interval": 1000,
+      "amount": 50
+    },
+    {
+      "id": "journal",
+      "label": "Acheter Journal clandestin (2500 Révolutionnaires)",
+      "cost": 2500,
+      "type": "autoclick",
+      "interval": 1000,
+      "amount": 100
+    },
+    {
+      "id": "soulevement",
+      "label": "Acheter Soulèvement populaire (5000 Révolutionnaires)",
+      "cost": 5000,
+      "type": "clickPower",
+      "power": 1000
+    }
+  ]
+  
