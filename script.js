@@ -1,23 +1,19 @@
-let counter = localStorage.getItem("counter") ? Number.parseInt(localStorage.getItem("counter")) : 0
-let clickPower = Number.parseInt(localStorage.getItem("clickPower")) || 1
-const unlockedItems = JSON.parse(localStorage.getItem("unlockedItems")) || []
-let upgrades = []
-const autoClickIntervals = []
+let counter = localStorage.getItem("counter") ? Number.parseInt(localStorage.getItem("counter")) : 0;
+let clickPower = Number.parseInt(localStorage.getItem("clickPower")) || 1;
+const unlockedItems = JSON.parse(localStorage.getItem("unlockedItems")) || [];
+let upgrades = [];
+const autoClickIntervals = [];
 
 let recruiters = Number.parseInt(localStorage.getItem("recruiters")) || 0
 let propagandists = Number.parseInt(localStorage.getItem("propagandists")) || 0
-let agitators = Number.parseInt(localStorage.getItem("agitators")) || 0
-let breakers = Number.parseInt(localStorage.getItem("breakers")) || 0
-
-const recruiterCost = 2 
-const propagandistCost = 5 
-const agitatorCost = 2
-const breakerCost = 5
+const recruiterCost = 20 
+const propagandistCost = 10 
 const costMultiplier = 1.3
-
 let recruiterInterval = null
 let propagandistInterval = null
 let displayInterval = null
+
+const worldPopulation = 8000000000;
 
 
 function resetGame() {
@@ -53,18 +49,22 @@ function resetGame() {
 }
 
 fetch("upgrades.json")
-  .then((response) => response.json())
-  .then((data) => {
-    upgrades = data
-    initGame()
+  .then(function(response) {
+    return response.json();
   })
-  .catch((error) => console.error("Erreur de chargement du fichier JSON:", error))
+  .then(function(data) {
+    upgrades = data;
+    initGame();
+  })
+  .catch(function(error) {
+    console.error("Erreur de chargement du fichier JSON:" + error);
+  });
 
 
 function saveUnlocked(item) {
   if (!unlockedItems.includes(item)) {
-    unlockedItems.push(item)
-    localStorage.setItem("unlockedItems", JSON.stringify(unlockedItems))
+    unlockedItems.push(item);
+    localStorage.setItem("unlockedItems", JSON.stringify(unlockedItems));
   }
 }
 
@@ -79,309 +79,354 @@ function saveGame() {
 }
 
 function initGame() {
-  document.getElementById("counter").textContent = counter
-  document.getElementById("bouton").addEventListener("click", addOne)
+  document.getElementById("counter").textContent = counter;
+  document.getElementById("bouton").addEventListener("click", addOne);
 
-  if (!document.getElementById("reset-button")) {
-    const resetButton = document.createElement("button")
-    resetButton.id = "reset-button"
-    resetButton.textContent = "Ne surtout pas cliquer sur ce bouton"
-    resetButton.addEventListener("click", resetGame)
-    resetButton.className = "reset-button"
-    document.body.insertBefore(resetButton, document.getElementById("upgrade-container"))
+  const resetButton = document.getElementById("reset-button");
+  if (resetButton) {
+    resetButton.addEventListener("click", resetGame);
   }
 
-  unlockedItems.forEach((itemId) => {
-    const upgrade = upgrades.find((u) => u.id === itemId)
+  unlockedItems.forEach(function(itemId) {
+    const upgrade = upgrades.find(function(u) {
+      return u.id === itemId;
+    });
     if (upgrade) {
       if (upgrade.type === "autoclick") {
-        const interval = setInterval(() => {
-          counter += upgrade.amount
-          document.getElementById("counter").textContent = counter
-          saveGame()
-        }, upgrade.interval)
-        autoClickIntervals.push(interval)
+        const interval = setInterval(function() {
+          counter += upgrade.amount;
+          document.getElementById("counter").textContent = counter;
+          saveGame();
+        }, upgrade.interval);
+        autoClickIntervals.push(interval);
       } else if (upgrade.type === "clickPower") {
-        clickPower = upgrade.power
+        clickPower = upgrade.power;
       }
     }
-  })
+  });
 
-  upgrades.forEach((upgrade) => {
+  upgrades.forEach(function(upgrade) {
     if (!unlockedItems.includes(upgrade.id) && counter >= upgrade.cost) {
-      showUpgradeButton(upgrade)
+      showUpgradeButton(upgrade);
     }
-  })
+  });
 
-  createRecruitersUI()
-  createPropagandistsUI()
+  createRecruitersUI();
+  createPropagandistsUI();
 
-  startRecruitersEffect()
-  startPropagandistsEffect()
+  startRecruitersEffect();
+  startPropagandistsEffect();
 
-  displayInterval = setInterval(updateDisplay, 1000)
+  displayInterval = setInterval(updateDisplay, 1000);
 }
 
 function initGameAfterReset() {
-  document.getElementById("counter").textContent = counter
+  document.getElementById("counter").textContent = counter;
 
-  upgrades.forEach((upgrade) => {
+  upgrades.forEach(function(upgrade) {
     if (!unlockedItems.includes(upgrade.id) && counter >= upgrade.cost) {
-      showUpgradeButton(upgrade)
+      showUpgradeButton(upgrade);
     }
-  })
+  });
 
-  createRecruitersUI()
-  createPropagandistsUI()
+  createRecruitersUI();
+  createPropagandistsUI();
 
-  startRecruitersEffect()
-  startPropagandistsEffect()
+  startRecruitersEffect();
+  startPropagandistsEffect();
 
-  displayInterval = setInterval(updateDisplay, 1000)
+  displayInterval = setInterval(updateDisplay, 1000);
 }
 
 // ADD A REVOLUTIONNAIRE
 function addOne() {
-  counter += clickPower
-  document.getElementById("counter").textContent = counter
+  counter += clickPower;
+  document.getElementById("counter").textContent = counter;
 
-  saveGame()
+  saveGame();
 
-  upgrades.forEach((upgrade) => {
+  upgrades.forEach(function(upgrade) {
     if (counter >= upgrade.cost && !unlockedItems.includes(upgrade.id)) {
-      showUpgradeButton(upgrade)
+      showUpgradeButton(upgrade);
     }
-  })
+  });
 
-  updateRecruitersButton()
-  updatePropagandistsButton()
+  updateRecruitersButton();
+  updatePropagandistsButton();
 }
 
-// UPGRADES BUTTON
 function showUpgradeButton(upgrade) {
   if (!document.getElementById(upgrade.id)) {
-    const btn = document.createElement("button")
-    btn.id = upgrade.id
-    btn.textContent = upgrade.label
-    btn.addEventListener("click", () => buyUpgrade(upgrade.id))
-    document.getElementById("upgrade-container").appendChild(btn)
+    var btn = document.createElement("button");
+    btn.id = upgrade.id;
+    btn.textContent = upgrade.label;
+    btn.addEventListener("click", function() {
+      buyUpgrade(upgrade.id);
+    });
+    document.getElementById("upgrade-container").appendChild(btn);
 
     if (unlockedItems.includes(upgrade.id)) {
-      btn.disabled = true
+      btn.disabled = true;
     }
   }
 }
 
-// BUY UPGRADES
 function buyUpgrade(upgradeID) {
-  const upgrade = upgrades.find((u) => u.id === upgradeID)
+  var upgrade = upgrades.find(function(u) {
+    return u.id === upgradeID;
+  });
 
   if (counter >= upgrade.cost) {
-    counter -= upgrade.cost
-    document.getElementById("counter").textContent = counter
-    saveGame()
-    saveUnlocked(upgrade.id)
+    counter -= upgrade.cost;
+    document.getElementById("counter").textContent = counter;
+    saveGame();
+    saveUnlocked(upgrade.id);
 
     if (upgrade.type === "autoclick") {
-      const interval = setInterval(() => {
-        counter += upgrade.amount
-        document.getElementById("counter").textContent = counter
-        saveGame()
-      }, upgrade.interval)
-      autoClickIntervals.push(interval)
+      var interval = setInterval(function() {
+        counter += upgrade.amount;
+        document.getElementById("counter").textContent = counter;
+        saveGame();
+      }, upgrade.interval);
+      autoClickIntervals.push(interval);
     } else if (upgrade.type === "clickPower") {
-      clickPower = upgrade.power
-      saveGame()
+      clickPower = upgrade.power;
+      saveGame();
     }
 
-    document.getElementById(upgrade.id).disabled = true
+    document.getElementById(upgrade.id).disabled = true;
   }
 }
 
 // RECRUITER
 function createRecruitersUI() {
-  const container = document.getElementById("upgrade-container")
+  var recruiterCountDiv = document.getElementById("recruiter-count");
+  recruiterCountDiv.innerHTML = "Recruteurs: <span id='recruiter-value'>" + recruiters + "</span>";
 
-  let specialSection = document.getElementById("special-upgrades")
-  if (!specialSection) {
-    specialSection = document.createElement("div")
-    specialSection.id = "special-upgrades"
-    specialSection.className = "special-section"
-    container.appendChild(specialSection)
+  var recruiterButton = document.getElementById("buy-recruiter");
+  recruiterButton.textContent = "Recruter (Coût: " + calculateRecruitCost() + " révolutionnaires)";
+  recruiterButton.addEventListener("click", buyRecruiter);
 
-    const sectionTitle = document.createElement("h2")
-    sectionTitle.textContent = "Recrutement et Propagande"
-    specialSection.appendChild(sectionTitle)
-  } else {
-    specialSection.innerHTML = ""
-
-    const sectionTitle = document.createElement("h2")
-    sectionTitle.textContent = "Recrutement et Propagande"
-    specialSection.appendChild(sectionTitle)
-  }
-
-  const recruiterCountDiv = document.createElement("div")
-  recruiterCountDiv.id = "recruiter-count"
-  recruiterCountDiv.innerHTML = `Recruteurs: <span id="recruiter-value">${recruiters}</span>`
-  specialSection.appendChild(recruiterCountDiv)
-
-  const recruiterButton = document.createElement("button")
-  recruiterButton.id = "buy-recruiter"
-  recruiterButton.textContent = `Recruter (Coût: ${calculateRecruitCost()} révolutionnaires)`
-  recruiterButton.addEventListener("click", buyRecruiter)
-  specialSection.appendChild(recruiterButton)
-
-  updateRecruitersButton()
+  updateRecruitersButton();
 }
 
 function calculateRecruitCost() {
-  return Math.floor(recruiterCost * Math.pow(costMultiplier, recruiters))
+  return Math.floor(recruiterCost * Math.pow(costMultiplier, recruiters));
 }
 
 function updateRecruitersButton() {
-  const button = document.getElementById("buy-recruiter")
+  var button = document.getElementById("buy-recruiter");
   if (button) {
-    const cost = calculateRecruitCost()
-    button.textContent = `Recruter (Coût: ${cost} révolutionnaires)`
-    button.disabled = counter < cost
+    var cost = calculateRecruitCost();
+    button.textContent = "Recruter (Coût: " + cost + " révolutionnaires)";
+    button.disabled = counter < cost;
   }
 }
 
 function buyRecruiter() {
-  const cost = calculateRecruitCost()
+  var cost = calculateRecruitCost();
   if (counter >= cost) {
-    counter -= cost
-    recruiters++
-
-    document.getElementById("recruiter-value").textContent = recruiters
-    document.getElementById("counter").textContent = counter
-
-    updateRecruitersButton()
-    updatePropagandistsButton()
-    saveGame()
+    counter -= cost;
+    recruiters++;
+    
+    document.getElementById("recruiter-value").textContent = recruiters;
+    document.getElementById("counter").textContent = counter;
+    
+    updateRecruitersButton();
+    updatePropagandistsButton();
+    saveGame();
+    // Formation supprimée : l'achat est instantané
   }
 }
 
 function startRecruitersEffect() {
   if (recruiterInterval) {
-    clearInterval(recruiterInterval)
+    clearInterval(recruiterInterval);
   }
-
-  recruiterInterval = setInterval(() => {
+  recruiterInterval = setInterval(function() {
     if (recruiters > 0) {
-      const baseEffect = 0.00033 
-      const propagandistBonus = 1 + propagandists * 0.02
-      const recruiterEffect = baseEffect * recruiters * propagandistBonus
-
-      const newRevolutionaries = Math.floor(counter * recruiterEffect)
+      var baseEffect = 0.00033;
+      var propagandistBonus = 1 + propagandists * 0.02;
+      var recruiterEffect = baseEffect * recruiters * propagandistBonus;
+      var newRevolutionaries = Math.floor(counter * recruiterEffect);
       if (newRevolutionaries > 0) {
-        counter += newRevolutionaries
-        document.getElementById("counter").textContent = counter
-        saveGame()
+        counter += newRevolutionaries;
+        document.getElementById("counter").textContent = counter;
+        saveGame();
       }
     }
-  }, 1000) 
+  }, 1000);
 }
 
 // PROPAGANDIST
 function createPropagandistsUI() {
-  const specialSection = document.getElementById("special-upgrades")
+  var propagandistCountDiv = document.getElementById("propagandist-count");
+  propagandistCountDiv.innerHTML = "Propagandistes: <span id='propagandist-value'>" + propagandists + "</span>";
 
-  const propagandistCountDiv = document.createElement("div")
-  propagandistCountDiv.id = "propagandist-count"
-  propagandistCountDiv.innerHTML = `Propagandistes: <span id="propagandist-value">${propagandists}</span>`
-  specialSection.appendChild(propagandistCountDiv)
+  var propagandistButton = document.getElementById("buy-propagandist");
+  propagandistButton.textContent = "Former un propagandiste (Coût: " + calculatePropagandistCost() + " recruteurs)";
+  propagandistButton.addEventListener("click", buyPropagandist);
 
-  const propagandistButton = document.createElement("button")
-  propagandistButton.id = "buy-propagandist"
-  propagandistButton.textContent = `Former un propagandiste (Coût: ${calculatePropagandistCost()} recruteurs)`
-  propagandistButton.addEventListener("click", buyPropagandist)
-  specialSection.appendChild(propagandistButton)
-
-  const statsElement = document.createElement("div")
-  statsElement.id = "stats"
-  specialSection.appendChild(statsElement)
-
-  updatePropagandistsButton()
+  updatePropagandistsButton();
 }
 
 function calculatePropagandistCost() {
-  return Math.floor(propagandistCost * Math.pow(costMultiplier, propagandists))
+  return Math.floor(propagandistCost * Math.pow(costMultiplier, propagandists));
 }
 
 function updatePropagandistsButton() {
-  const button = document.getElementById("buy-propagandist")
+  var button = document.getElementById("buy-propagandist");
   if (button) {
-    const cost = calculatePropagandistCost()
-    button.textContent = `Former un propagandiste (Coût: ${cost} recruteurs)`
-    button.disabled = recruiters < cost
+    var cost = calculatePropagandistCost();
+    button.textContent = "Former un propagandiste (Coût: " + cost + " recruteurs)";
+    button.disabled = recruiters < cost;
   }
 }
 
 function buyPropagandist() {
-  const cost = calculatePropagandistCost()
+  var cost = calculatePropagandistCost();
   if (recruiters >= cost) {
-    recruiters -= cost
-    propagandists++
-
-    document.getElementById("propagandist-value").textContent = propagandists
-    document.getElementById("recruiter-value").textContent = recruiters
-
-    updatePropagandistsButton()
-    saveGame()
+    recruiters -= cost;
+    propagandists++;
+    
+    document.getElementById("propagandist-value").textContent = propagandists;
+    document.getElementById("recruiter-value").textContent = recruiters;
+    
+    updatePropagandistsButton();
+    saveGame();
+    // Formation supprimée : l'achat est instantané
   }
 }
 
 function startPropagandistsEffect() {
   if (propagandistInterval) {
-    clearInterval(propagandistInterval)
+    clearInterval(propagandistInterval);
   }
-
-  propagandistInterval = setInterval(() => {
+  propagandistInterval = setInterval(function() {
     if (propagandists > 0 && recruiters > 0) {
-      
-      const baseEffect = 0.000083 
-      const propagandistEffect = baseEffect * propagandists
-
-      const newRecruiters = Math.random() < propagandistEffect ? 1 : 0
+      var baseEffect = 0.000083;
+      var propagandistEffect = baseEffect * propagandists;
+      var newRecruiters = Math.random() < propagandistEffect ? 1 : 0;
       if (newRecruiters > 0) {
-        recruiters += newRecruiters
-        document.getElementById("recruiter-value").textContent = recruiters
-        updatePropagandistsButton()
-        saveGame()
+        recruiters += newRecruiters;
+        document.getElementById("recruiter-value").textContent = recruiters;
+        updatePropagandistsButton();
+        saveGame();
       }
     }
-  }, 1000) 
+  }, 1000);
+}
+
+function updateProgressBar() {
+  // Calcul du pourcentage = (counter / worldPopulation) * 100
+  var percent = (counter / worldPopulation) * 100;
+  if (percent > 100) {
+    percent = 100;
+  }
+  var progressBar = document.getElementById("progress-bar");
+  progressBar.style.width = percent + "%";
+  progressBar.textContent = Math.floor(percent) + "%";
+}
+
+/* Mise à jour de la jauge de répression */
+function updateRepression() {
+  // Calcul du pourcentage de répression en fonction du nombre de révolutionnaires,
+  // casseurs et agitateurs. La formule est arbitraire et peut être ajustée.
+  var repressionBase = counter + breakers * 100 + agitators * 200;
+  var maxRepression = 1000000; // Valeur max arbitraire pour 100% de répression.
+  var percent = (repressionBase / maxRepression) * 100;
+  if (percent > 100) {
+    percent = 100;
+  }
+  var repressionBar = document.getElementById("repression-bar");
+  repressionBar.style.width = percent + "%";
+  repressionBar.textContent = Math.floor(percent) + "%";
+
+  // Changement de couleur de la jauge en fonction du pourcentage de répression.
+  if (percent < 25) {
+    repressionBar.className = "repression-bar repression-low";
+  } else if (percent < 50) {
+    repressionBar.className = "repression-bar repression-med-low";
+  } else if (percent < 75) {
+    repressionBar.className = "repression-bar repression-med-high";
+  } else {
+    repressionBar.className = "repression-bar repression-high";
+  }
+
+  // Déclenchement aléatoire d'un malus si la répression dépasse 50%.
+  if (percent > 50 && malusActions.length > 0) {
+    if (Math.random() < 0.05) { // 5% de chance par mise à jour
+      var randomIndex = Math.floor(Math.random() * malusActions.length);
+      var malus = malusActions[randomIndex];
+      applyMalus(malus);
+    }
+  }
+}
+
+/* Application d'un malus issu du JSON malus */
+function applyMalus(malus) {
+  // malus est un objet de la forme :
+  // { "action": "arrestation", "reduction": {"counter": 10, "recruiters": 1, "clickPower": 1} }
+  if (malus.reduction) {
+    if (malus.reduction.counter) {
+      counter = Math.max(0, counter - malus.reduction.counter);
+      document.getElementById("counter").textContent = counter;
+    }
+    if (malus.reduction.recruiters) {
+      recruiters = Math.max(0, recruiters - malus.reduction.recruiters);
+      document.getElementById("recruiter-value").textContent = recruiters;
+    }
+    if (malus.reduction.clickPower) {
+      clickPower = Math.max(1, clickPower - malus.reduction.clickPower);
+    }
+  }
+  // Affichage du message de malus
+  var malusMessage = document.getElementById("malus-message");
+  malusMessage.textContent = "Malus déclenché: " + malus.action;
+  // Effacer le message après quelques secondes
+  setTimeout(function() {
+    malusMessage.textContent = "";
+  }, 5000);
 }
 
 function updateDisplay() {
-  document.getElementById("counter").textContent = Math.floor(counter)
+  document.getElementById("counter").textContent = Math.floor(counter);
+  var recruiterValue = document.getElementById("recruiter-value");
+  var propagandistValue = document.getElementById("propagandist-value");
+  if (recruiterValue) recruiterValue.textContent = recruiters;
+  if (propagandistValue) propagandistValue.textContent = propagandists;
 
-  const recruiterValue = document.getElementById("recruiter-value")
-  const propagandistValue = document.getElementById("propagandist-value")
+  var recruiterBonus = propagandists * 2;
+  var recruiterEfficiency = 2 + recruiterBonus;
+  var productionPerMinute = Math.floor(counter * (recruiterEfficiency / 100) * recruiters);
 
-  if (recruiterValue) recruiterValue.textContent = recruiters
-  if (propagandistValue) propagandistValue.textContent = propagandists
-
-  const recruiterBonus = propagandists * 2
-  const recruiterEfficiency = 2 + recruiterBonus
-
-  // const statsElement = document.getElementById("stats")
-  // if (statsElement) {
-  //   statsElement.innerHTML = `
-  //     <p>Puissance de clic: ${clickPower}</p>
-  //     <p>Efficacité des recruteurs: ${recruiterEfficiency}% par minute</p>
-  //     <p>Bonus des propagandistes: +${recruiterBonus}%</p>
-  //     <p>Production par minute: ${Math.floor(counter * (recruiterEfficiency / 100) * recruiters)} révolutionnaires</p>
-  //   `
-  // }
-
-  upgrades.forEach((upgrade) => {
-    if (counter >= upgrade.cost && !unlockedItems.includes(upgrade.id)) {
-      showUpgradeButton(upgrade)
+  var statsElement = document.getElementById("stats");
+  if (statsElement) {
+    while (statsElement.firstChild) {
+      statsElement.removeChild(statsElement.firstChild);
     }
-  })
+    var powerPara = document.createElement("p");
+    powerPara.textContent = "Puissance de clic: " + clickPower;
+    statsElement.appendChild(powerPara);
+    var efficiencyPara = document.createElement("p");
+    efficiencyPara.textContent = "Efficacité des recruteurs: " + recruiterEfficiency + "% par minute";
+    statsElement.appendChild(efficiencyPara);
+    var bonusPara = document.createElement("p");
+    bonusPara.textContent = "Bonus des propagandistes: +" + recruiterBonus + "%";
+    statsElement.appendChild(bonusPara);
+    var productionPara = document.createElement("p");
+    productionPara.textContent = "Production par minute: " + productionPerMinute + " révolutionnaires";
+    statsElement.appendChild(productionPara);
+  }
 
-  updateRecruitersButton()
-  updatePropagandistsButton()
+  upgrades.forEach(function(upgrade) {
+    if (counter >= upgrade.cost && !unlockedItems.includes(upgrade.id)) {
+      showUpgradeButton(upgrade);
+    }
+  });
+
+  updateRecruitersButton();
+  updatePropagandistsButton();
+  updateProgressBar();
+  updateRepression();
 }
