@@ -11,8 +11,16 @@ const propagandistCost = 5
 const costMultiplier = 1.3
 let recruiterInterval = null
 let propagandistInterval = null
-let displayInterval = null
 
+
+
+function hideAllContainersExceptMain() {
+  document.querySelectorAll(".game-container").forEach(el => {
+    if (!el.classList.contains("main-game-container")) {
+      el.classList.add("hidden");
+    }
+  });
+}
 
 
 function resetGame() {
@@ -30,21 +38,14 @@ function resetGame() {
   recruiters = 0;
   propagandists = 0;
 
-  // Arrêter les intervalles automatiques existants
-  autoClickIntervals.forEach((interval) => clearInterval(interval));
-  autoClickIntervals.length = 0;
-  if (recruiterInterval) clearInterval(recruiterInterval);
-  if (propagandistInterval) clearInterval(propagandistInterval);
-  if (displayInterval) clearInterval(displayInterval);
-
-  // Mise à jour de l'affichage sans supprimer les éléments HTML
-  document.getElementById("counter").textContent = counter;
-
   // Au lieu de vider le container, on met à jour uniquement les valeurs affichées
   updateRecruitersButton();
   updatePropagandistsButton();
+  updateRepressionBar();
+  updateProgressBar();
   updateDisplay();
   initGameAfterReset();
+  hideAllContainersExceptMain();
 }
 
 
@@ -108,7 +109,8 @@ function initGame() {
   startRecruitersEffect()
   startPropagandistsEffect()
 
-  displayInterval = setInterval(updateDisplay)
+  updateDisplay();
+  hideAllContainersExceptMain();
 }
 
 function initGameAfterReset() {
@@ -127,6 +129,7 @@ function initGameAfterReset() {
   startPropagandistsEffect()
 
   displayInterval = setInterval(updateDisplay, 1000)
+  hideAllContainersExceptMain();
 }
 
 // ADD A REVOLUTIONNAIRE
@@ -373,6 +376,109 @@ function updateDisplay() {
 
   
   updateProgressBar();
-  updateRecruitersButton()
-  updatePropagandistsButton()
+  checkAndActivateMaluses();
+  updateRecruitersButton();
+  updatePropagandistsButton();
+  updateRepressionBar();
+}
+
+
+
+// Déclaration globale de la liste des malus
+let malusList = [];
+
+// Chargement du fichier JSON contenant les malus
+fetch("malus.json")
+  .then((response) => response.json())
+  .then((data) => {
+    malusList = data;
+    // Une fois le JSON chargé, vous pouvez lancer votre cycle d'updates
+    startMalusCycle();
+  })
+  .catch((error) => console.error("Erreur lors du chargement du JSON des malus:", error));
+
+
+// Objet pour suivre quels malus sont actuellement activés
+const activeMaluses = {};
+
+// Chargement du fichier JSON contenant les malus
+fetch("malus.json")
+  .then((response) => response.json())
+  .then((data) => {
+    malusList = data;
+    // Démarrage de la boucle de vérification des malus une fois le JSON chargé
+    startMalusCycle();
+  })
+  .catch((error) => console.error("Erreur lors du chargement du JSON des malus:", error));
+
+function updateRepressionBar() {
+  let repressionLevel = counter/(recruiters+propagandists+1);
+  repressionLevel += 0.1; // Ajustez la vitesse d'augmentation si nécessaire
+  if (repressionLevel > 100) {
+    repressionLevel = 100;
+    resetGame();
+    updateDisplay();
+  }
+
+  const repressionBar = document.getElementById("repression-bar");
+  // On s'assure que la valeur est comprise entre 0 et 100
+  const percent = Math.min(100, Math.max(0, repressionLevel));
+  
+  // Mise à jour de la largeur de la barre, du texte et déclenche la transition CSS
+  repressionBar.style.width = percent + "%";
+  repressionBar.textContent = Math.floor(percent) + "%";
+
+  // Retire les anciennes classes de couleur pour pouvoir en ajouter la nouvelle
+  repressionBar.classList.remove("repression-low", "repression-med-low", "repression-med-high", "repression-high");
+
+  // Application dynamique de la classe de couleur en fonction des seuils
+  if (percent < 25) {
+    repressionBar.classList.add("repression-low");
+  } else if (percent < 50) {
+    repressionBar.classList.add("repression-med-low");
+  } else if (percent < 90) {
+    repressionBar.classList.add("repression-med-high");
+  } else {
+    repressionBar.classList.add("repression-high");
+  }
+}
+
+
+function checkAndActivateMaluses() {
+  // Ici, nous utilisons la même logique que dans updateRepressionBar pour obtenir le pourcentage actuel
+  let repressionLevel = counter/(recruiters+propagandists+1);
+  repressionLevel += 0.1;
+  if (repressionLevel > 100) {
+    repressionLevel = 100;
+    resetGame();
+  }
+  const currentRepression = repressionLevel; // Ce pourcentage sert à déclencher les malus
+  
+  const malusContainer = document.getElementById("maluses");
+  if (!malusContainer) return;
+
+  // Pour chaque malus défini dans le JSON, vérifie si son seuil est dépassé et qu'il n'est pas déjà actif
+  malusList.forEach(malus => {
+    if (currentRepression >= malus.triggerThreshold && !activeMaluses[malus.id]) {
+      // Créer un élément pour afficher le malus
+      const malusDiv = document.createElement("div");
+      malusDiv.id = malus.id;
+      malusDiv.textContent = malus.label;
+      // Vous pouvez ajouter une classe pour styliser l'affichage des malus, par exemple "malus-item"
+      malusDiv.classList.add("malus-item");
+      
+      // Ajouter l'élément au conteneur
+      malusContainer.appendChild(malusDiv);
+      
+      // Marquer ce malus comme actif et prévoir son retrait après la durée définie
+      activeMaluses[malus.id] = setTimeout(() => {
+        malusContainer.removeChild(malusDiv);
+        delete activeMaluses[malus.id];
+      }, malus.duration);
+    }
+  });
+}
+
+function startMalusCycle() {
+  setInterval(updateDisplay, 1000);
 }

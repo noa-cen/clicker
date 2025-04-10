@@ -1,4 +1,35 @@
-{
-    "malus": []
-  }
+[
+    {
+      "id": "malus_light",
+      "label": "Répression légère : -10% sur la puissance de clic",
+      "triggerThreshold": 25,
+      "duration": 60000,
+      "type": "clickPower",
+      "intensity": 0.1
+    },
+    {
+      "id": "malus_mod_low",
+      "label": "Répression modérée : -15% sur l'autoclick",
+      "triggerThreshold": 50,
+      "duration": 60000,
+      "type": "autoclick",
+      "intensity": 0.15
+    },
+    {
+      "id": "malus_mod_high",
+      "label": "Répression forte : -25% sur l'efficacité des recruteurs",
+      "triggerThreshold": 75,
+      "duration": 60000,
+      "type": "recruiters",
+      "intensity": 0.25
+    },
+    {
+      "id": "malus_total",
+      "label": "Répression totale : -50% sur toutes vos actions",
+      "triggerThreshold": 90,
+      "duration": 60000,
+      "type": "global",
+      "intensity": 0.5
+    }
+  ]
   
