@@ -6,9 +6,15 @@ const autoClickIntervals = []
 
 let recruiters = Number.parseInt(localStorage.getItem("recruiters")) || 0
 let propagandists = Number.parseInt(localStorage.getItem("propagandists")) || 0
-const recruiterCost = 20 
-const propagandistCost = 10 
+let agitators = Number.parseInt(localStorage.getItem("agitators")) || 0
+let breakers = Number.parseInt(localStorage.getItem("breakers")) || 0
+
+const recruiterCost = 2 
+const propagandistCost = 5 
+const agitatorCost = 2
+const breakerCost = 5
 const costMultiplier = 1.3
+
 let recruiterInterval = null
 let propagandistInterval = null
 let displayInterval = null
@@ -20,12 +26,16 @@ function resetGame() {
   localStorage.removeItem("unlockedItems")
   localStorage.removeItem("recruiters")
   localStorage.removeItem("propagandists")
+  localStorage.removeItem("agitators")
+  localStorage.removeItem("breakers")
 
   counter = 0
   clickPower = 1
   unlockedItems.length = 0
   recruiters = 0
   propagandists = 0
+  agitators = 0
+  breakers = 0
 
   autoClickIntervals.forEach((interval) => clearInterval(interval))
   autoClickIntervals.length = 0
@@ -50,6 +60,7 @@ fetch("upgrades.json")
   })
   .catch((error) => console.error("Erreur de chargement du fichier JSON:", error))
 
+
 function saveUnlocked(item) {
   if (!unlockedItems.includes(item)) {
     unlockedItems.push(item)
@@ -63,6 +74,8 @@ function saveGame() {
   localStorage.setItem("unlockedItems", JSON.stringify(unlockedItems))
   localStorage.setItem("recruiters", recruiters)
   localStorage.setItem("propagandists", propagandists)
+  localStorage.setItem("agitators", agitators)
+  localStorage.setItem("breakers", breakers)
 }
 
 function initGame() {
@@ -72,7 +85,7 @@ function initGame() {
   if (!document.getElementById("reset-button")) {
     const resetButton = document.createElement("button")
     resetButton.id = "reset-button"
-    resetButton.textContent = "Réinitialiser la révolution"
+    resetButton.textContent = "Ne surtout pas cliquer sur ce bouton"
     resetButton.addEventListener("click", resetGame)
     resetButton.className = "reset-button"
     document.body.insertBefore(resetButton, document.getElementById("upgrade-container"))
@@ -185,6 +198,7 @@ function buyUpgrade(upgradeID) {
   }
 }
 
+// RECRUITER
 function createRecruitersUI() {
   const container = document.getElementById("upgrade-container")
 
@@ -269,6 +283,7 @@ function startRecruitersEffect() {
   }, 1000) 
 }
 
+// PROPAGANDIST
 function createPropagandistsUI() {
   const specialSection = document.getElementById("special-upgrades")
 
@@ -351,15 +366,15 @@ function updateDisplay() {
   const recruiterBonus = propagandists * 2
   const recruiterEfficiency = 2 + recruiterBonus
 
-  const statsElement = document.getElementById("stats")
-  if (statsElement) {
-    statsElement.innerHTML = `
-      <p>Puissance de clic: ${clickPower}</p>
-      <p>Efficacité des recruteurs: ${recruiterEfficiency}% par minute</p>
-      <p>Bonus des propagandistes: +${recruiterBonus}%</p>
-      <p>Production par minute: ${Math.floor(counter * (recruiterEfficiency / 100) * recruiters)} révolutionnaires</p>
-    `
-  }
+  // const statsElement = document.getElementById("stats")
+  // if (statsElement) {
+  //   statsElement.innerHTML = `
+  //     <p>Puissance de clic: ${clickPower}</p>
+  //     <p>Efficacité des recruteurs: ${recruiterEfficiency}% par minute</p>
+  //     <p>Bonus des propagandistes: +${recruiterBonus}%</p>
+  //     <p>Production par minute: ${Math.floor(counter * (recruiterEfficiency / 100) * recruiters)} révolutionnaires</p>
+  //   `
+  // }
 
   upgrades.forEach((upgrade) => {
     if (counter >= upgrade.cost && !unlockedItems.includes(upgrade.id)) {

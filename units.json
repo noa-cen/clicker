@@ -1,0 +1,51 @@
+{
+  "recruiter": {
+    "name": "Recruteur",
+    "baseCost": 2,
+    "currency": "revolutionaries",
+    "effectType": "incremental", 
+    "effectValue": 0.02,
+    "unlockCondition": {
+      "type": "resource",
+      "key": "revolutionaries",
+      "amount": 2
+    }
+  },
+  "propagandist": {
+    "name": "Propagandiste",
+    "baseCost": 10,
+    "currency": "recruiter",
+    "effectType": "booster",
+    "effectTarget": "recruiter",
+    "effectValue": 0.02,
+    "unlockCondition": {
+      "type": "unit",
+      "key": "recruiter",
+      "amount": 10
+    }
+  },
+  "agitator": {
+    "name": "Agitateur",
+    "baseCost": 2,
+    "currency": "revolutionaries",
+    "effectType": "eventBoost",
+    "effectValue": 0.20,
+    "unlockCondition": {
+      "type": "unit",
+      "key": "recruiter",
+      "amount": 2
+    }
+  },
+  "breaker": {
+    "name": "Casseur",
+    "baseCost": 5,
+    "currency": "agitator",
+    "effectType": "reduceRepression",
+    "effectValue": 0.01,
+    "unlockCondition": {
+      "type": "unit",
+      "key": "agitator",
+      "amount": 5
+    }
+  }
+}
