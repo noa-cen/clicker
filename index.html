@@ -1,15 +1,63 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="script.js" defer></script>
-    <title>ClickCLick</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+  <title>ClickCLick</title>
 </head>
 <body>
-    <h1>REVOLUTION</h1>
-    <button id="bouton">ON NE CLIQUE PAS SUR UN PEUPLE EN COLERE</button>
-    <p><span id="counter">0</span> révolutionnaires sont en révolution.</p>
-    <div id="upgrade-container"></div>
+  <header>
+    <button id="reset-button" class="reset-button">Réinitialiser la révolution</button>
+    <button class="pause" id="pause">⏸️</button>
+  </header>
+
+  <main>
+    <section id="game-container" class="game-container">
+      <article id="main-game-container" class="game-container main-game-container">
+        <h1>REVOLUTION</h1>
+      
+        <button id="bouton">ON N'ARRÊTE PAS UN PEUPLE QUI CLICK</button>
+        <p><span id="counter">0</span> révolutionnaires sont en révolution.</p>
+
+        <div id="progress-container" class="progress-container">
+          <div id="progress-bar" class="progress-bar">0%</div>
+        </div>
+
+        <div id="upgrade-container">
+          <div id="special-upgrades" class="special-section">
+            <h2>Recrutement et Propagande</h2>
+            
+            <div id="recruiter-count">
+              Recruteurs: <span id="recruiter-value">0</span>
+            </div>
+            <button id="buy-recruiter" class="upgrade-button">Former un recruteur</button>
+            
+            <div id="propagandist-count">
+              Propagandistes: <span id="propagandist-value">0</span>
+            </div>
+            <button id="buy-propagandist" class="upgrade-button">Former un propagandiste</button>
+            
+            <div id="stats"></div>
+          </div>
+        </div>
+
+      </article>
+      
+      <article id="repression-container" class="game-container repression-container">
+      
+        <h2>REPRESSION</h2>
+
+        <div id="repression-bar" class="repression-bar">0%</div>
+
+        <p id="malus-message" class="malus-message"></p>
+      </article>
+      
+      
+    </section>
+    
+
+  </main>
 </body>
 </html>
