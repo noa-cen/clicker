@@ -39,10 +39,6 @@ function resetGame() {
   propagandists = 0;
 
   // Au lieu de vider le container, on met à jour uniquement les valeurs affichées
-  updateRecruitersButton();
-  updatePropagandistsButton();
-  updateRepressionBar();
-  updateProgressBar();
   updateDisplay();
   initGameAfterReset();
 }
@@ -380,10 +376,10 @@ function updateDisplay() {
 
   
   updateProgressBar();
-  checkAndActivateMaluses();
   updateRecruitersButton();
   updatePropagandistsButton();
   updateRepressionBar();
+  checkAndActivateMaluses();
 }
 
 
