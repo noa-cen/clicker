@@ -1,0 +1,138 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body {
+    font-family: "Press Start 2P", system-ui;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+    background-image: url('img/bf1226e1-4073-4926-82cc-3e5fa6166c77.png');
+    background-size: cover;       
+    background-repeat: no-repeat; 
+    background-position: center; 
+
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2em;
+    color: #fffbfb;
+    text-transform: uppercase;
+    padding: 1em 0 0 0;
+}
+
+
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.form-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 0px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%; 
+    max-width: 400px;
+    text-align: center;
+}
+
+
+.name-revolution, .chef-revolution {
+    margin-bottom: 15px; 
+}
+
+label {
+    display: block;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2em;
+    border: 2px solid #ccc;
+    border-radius: 0px;
+}
+
+
+.image-selector {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.image-selector input[type="radio"] {
+    display: none;
+}
+
+.image-selector label {
+    cursor: pointer;
+    width: 30%;
+    display: inline-block;
+    transition: transform 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.chef-image {
+    width: 90px;
+    height: auto;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.chef-image:hover {
+    transform: scale(1.5);
+}
+
+.image-selector input[type="radio"]:checked + label .chef-image {
+    transform: scale(1.3);
+}
+
+.container{
+    width: 70%;
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+button {
+    color: #fff;
+    background-color: #bc3a3a;
+    padding: 15px 40px 15px 40px;
+    margin: 10px;
+    border: 0;
+    box-shadow: 0px 5px black, 0px -5px black, 5px 0px black, -5px 0px black, 0px 10px #00000038, 5px 5px #00000038, -5px 5px #00000038, inset 0px 5px #ffffff36 ;
+    cursor: pointer;
+    width: 100%;
+}
+
+button:active {
+transform: translateY(5px);
+box-shadow: 0px 5px black, 0px -5px black, 5px 0px black, -5px 0px black,inset 0px 5px #00000038;
+}
+
+
+

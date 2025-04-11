@@ -1,80 +1,140 @@
 [
-    {
-      "id": "tract",
-      "label": "Acheter Tract (10 Révolutionnaires)",
-      "cost": 10,
-      "type": "autoclick",
-      "interval": 5000,
-      "amount": 1
-    },
-    {
-      "id": "affiche",
-      "label": "Acheter Affiche (50 Révolutionnaires)",
-      "cost": 50,
-      "type": "autoclick",
-      "interval": 1000,
-      "amount": 1
-    },
-    {
-      "id": "megaphone",
-      "label": "Acheter Mégaphone (100 Révolutionnaires)",
-      "cost": 100,
-      "type": "clickPower",
-      "power": 2
-    },
-    {
-      "id": "manif",
-      "label": "Acheter Manif éclair (250 Révolutionnaires)",
-      "cost": 250,
-      "type": "autoclick",
-      "interval": 1000,
-      "amount": 5
-    },
-    {
-      "id": "comite",
-      "label": "Acheter Comité local (500 Révolutionnaires)",
-      "cost": 500,
-      "type": "autoclick",
-      "interval": 1000,
-      "amount": 10
-    },
-    {
-      "id": "reseau",
-      "label": "Acheter Réseau militant (1000 Révolutionnaires)",
-      "cost": 1000,
-      "type": "clickPower",
-      "power": 10
-    },
-    {
-      "id": "greve",
-      "label": "Acheter Grève générale (1500 Révolutionnaires)",
-      "cost": 1500,
-      "type": "autoclick",
-      "interval": 1000,
-      "amount": 25
-    },
-    {
-      "id": "radio",
-      "label": "Acheter Radio pirate (2000 Révolutionnaires)",
-      "cost": 2000,
-      "type": "autoclick",
-      "interval": 1000,
-      "amount": 50
-    },
-    {
-      "id": "journal",
-      "label": "Acheter Journal clandestin (2500 Révolutionnaires)",
-      "cost": 2500,
-      "type": "autoclick",
-      "interval": 1000,
-      "amount": 100
-    },
-    {
-      "id": "soulevement",
-      "label": "Acheter Soulèvement populaire (5000 Révolutionnaires)",
-      "cost": 5000,
-      "type": "clickPower",
-      "power": 1000
-    }
-  ]
-  
+  {
+    "id": "tract",
+    "label": "Acheter Tract (10 Révolutionnaires)",
+    "cost": 10,
+    "type": "autoclick",
+    "interval": 5000,
+    "amount": 1
+  },
+  {
+    "id": "affiche",
+    "label": "Acheter Affiche (50 Révolutionnaires)",
+    "cost": 50,
+    "type": "autoclick",
+    "interval": 1000,
+    "amount": 1
+  },
+  {
+    "id": "megaphone",
+    "label": "Acheter Mégaphone (100 Révolutionnaires)",
+    "cost": 100,
+    "type": "clickPower",
+    "power": 2
+  },
+  {
+    "id": "manif",
+    "label": "Acheter Manif éclair (250 Révolutionnaires)",
+    "cost": 250,
+    "type": "autoclick",
+    "interval": 1000,
+    "amount": 5
+  },
+  {
+    "id": "comite",
+    "label": "Acheter Comité local (500 Révolutionnaires)",
+    "cost": 500,
+    "type": "autoclick",
+    "interval": 1000,
+    "amount": 10
+  },
+  {
+    "id": "reseau",
+    "label": "Acheter Réseau militant (1000 Révolutionnaires)",
+    "cost": 1000,
+    "type": "clickPower",
+    "power": 10
+  },
+  {
+    "id": "greve",
+    "label": "Acheter Grève générale (1500 Révolutionnaires)",
+    "cost": 1500,
+    "type": "autoclick",
+    "interval": 1000,
+    "amount": 25
+  },
+  {
+    "id": "radio",
+    "label": "Acheter Radio pirate (2000 Révolutionnaires)",
+    "cost": 2000,
+    "type": "autoclick",
+    "interval": 1000,
+    "amount": 50
+  },
+  {
+    "id": "journal",
+    "label": "Acheter Journal clandestin (2500 Révolutionnaires)",
+    "cost": 2500,
+    "type": "autoclick",
+    "interval": 1000,
+    "amount": 100
+  },
+  {
+    "id": "soulevement",
+    "label": "Acheter Soulèvement populaire (5000 Révolutionnaires)",
+    "cost": 5000,
+    "type": "clickPower",
+    "power": 1000
+  },
+  {
+    "id": "assemblee",
+    "label": "Acheter Assemblée insurrectionnelle (7500 Révolutionnaires)",
+    "cost": 7500,
+    "type": "autoclick",
+    "interval": 1000,
+    "amount": 250,
+    "description": "Un parlement du peuple s’installe, qui organise la résistance. +250 révolutionnaires par seconde."
+  },
+  {
+    "id": "milice",
+    "label": "Acheter Milice du peuple (10000 Révolutionnaires)",
+    "cost": 10000,
+    "type": "autoclick",
+    "interval": 1000,
+    "amount": 500,
+    "description": "Des groupes d’autodéfense assurent la sécurité révolutionnaire. +500 révolutionnaires par seconde."
+  },
+  {
+    "id": "contreinfo",
+    "label": "Acheter Réseau de contre-information (15000 Révolutionnaires)",
+    "cost": 15000,
+    "type": "clickPower",
+    "power": 5000,
+    "description": "La vérité circule, la révolte se propage. +5000 révolutionnaires par clic."
+  },
+  {
+    "id": "international",
+    "label": "Acheter Soutien international (25000 Révolutionnaires)",
+    "cost": 25000,
+    "type": "autoclick",
+    "interval": 500,
+    "amount": 1000,
+    "description": "Des camarades du monde entier rejoignent la lutte. +1000 révolutionnaires toutes les 0.5s."
+  },
+  {
+    "id": "autogestion",
+    "label": "Acheter Zone en autogestion (50000 Révolutionnaires)",
+    "cost": 50000,
+    "type": "autoclick",
+    "interval": 500,
+    "amount": 2500,
+    "description": "Un territoire libéré s’organise sans hiérarchie. +2500 révolutionnaires toutes les 0.5s."
+  },
+  {
+    "id": "commune",
+    "label": "Fonder une Commune libre (100000 Révolutionnaires)",
+    "cost": 100000,
+    "type": "clickPower",
+    "power": 20000,
+    "description": "La société se transforme. Vous gagnez +20000 révolutionnaires par clic."
+  },
+  {
+    "id": "utopie",
+    "label": "Proclamer l'Utopie (250000 Révolutionnaires)",
+    "cost": 250000,
+    "type": "autoclick",
+    "interval": 100,
+    "amount": 10000,
+    "description": "Le rêve devient réalité. +10000 révolutionnaires toutes les 0.1s."
+  }  
+]

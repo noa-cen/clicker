@@ -45,8 +45,6 @@ function resetGame() {
   updateProgressBar();
   updateDisplay();
   initGameAfterReset();
-  hideAllContainersExceptMain();
-  updateDisplay();
 }
 
 
@@ -57,6 +55,7 @@ fetch("upgrades.json")
     initGame()
   })
   .catch((error) => console.error("Erreur de chargement du fichier JSON:", error))
+
 
 function saveUnlocked(item) {
   if (!unlockedItems.includes(item)) {
@@ -71,6 +70,8 @@ function saveGame() {
   localStorage.setItem("unlockedItems", JSON.stringify(unlockedItems))
   localStorage.setItem("recruiters", recruiters)
   localStorage.setItem("propagandists", propagandists)
+  localStorage.setItem("agitators", agitators)
+  localStorage.setItem("breakers", breakers)
 }
 
 function initGame() {
@@ -207,6 +208,7 @@ function buyUpgrade(upgradeID) {
   }
 }
 
+// RECRUITER
 function createRecruitersUI() {
   const recruiterCountDiv = document.getElementById("recruiter-count")
   recruiterCountDiv.innerHTML = `Recruteurs: <span id="recruiter-value">${recruiters}</span>`
@@ -269,6 +271,7 @@ function startRecruitersEffect() {
   }, 1000) 
 }
 
+// PROPAGANDIST
 function createPropagandistsUI() {
   const propagandistCountDiv = document.getElementById("propagandist-count")
   propagandistCountDiv.innerHTML = `Propagandistes: <span id="propagandist-value">${propagandists}</span>`
