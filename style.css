@@ -103,6 +103,7 @@ button {
     width: auto;
     min-height: 25px;
     padding: 0 25px;
+    margin: 5px;
     height: auto;
     border: none;
     border-radius: 0.375rem;

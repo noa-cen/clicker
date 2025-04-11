@@ -46,6 +46,7 @@ function resetGame() {
   updateDisplay();
   initGameAfterReset();
   hideAllContainersExceptMain();
+  updateDisplay();
 }
 
 
@@ -128,7 +129,7 @@ function initGameAfterReset() {
   startRecruitersEffect()
   startPropagandistsEffect()
 
-  displayInterval = setInterval(updateDisplay, 1000)
+  updateDisplay();
   hideAllContainersExceptMain();
 }
 
