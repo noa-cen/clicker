@@ -17,13 +17,13 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault();
 
         const parti = partiInput.value;
-        const chefImages = document.querySelector(".chef-image");
+        const chefImages = document.querySelectorAll(".chef-image");
 
         if (parti){
             localStorage.setItem("parti", parti);
         }
 
-        chefImages.foreach(chef=>{
+        chefImages.forEach(chef=>{
             chef.addEventListener("click",()=>{
                 const chefId = chefImages.id;
                 localStorage.setItem("chef-image",chefId);

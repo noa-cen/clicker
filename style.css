@@ -48,7 +48,7 @@ main{
 .game-container{
     top: 0;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     flex-flow: wrap;
     border: solid;
     height: 100%;
@@ -110,12 +110,15 @@ p{
     width: 90px
  }
 
+
 /* Jauge de progression */
 .progress-container {
-    width: 100%;
+    width: 90%;
+    align-self: center;
     background-color: #e5e7eb;  /* équivalent de bg-gray-200 */
-    border-radius: 9999px;      /* rounded-full */
+    border-radius: 100px;      /* rounded-full */
     margin-top: 1rem;
+    border: solid black 3px;
 }
   
 .progress-bar {
@@ -126,7 +129,7 @@ p{
     text-align: center;
     padding: 0.125rem 0;        /* p-0.5 */
     line-height: 1;             /* leading-none */
-    border-radius: 99px;      /* rounded-full */
+    border-radius: 100px;      /* rounded-full */
     width: 0%;
     transition: width 0.5s ease-in-out;
 
@@ -151,7 +154,7 @@ button {
 .repression-container {
     display: flex;
     flex-flow: wrap;
-    justify-content: left;
+    justify-content: center;
     text-align: justify;
     background-color: #e5e7eb;
 

@@ -153,8 +153,6 @@ function saveGame() {
   localStorage.setItem("unlockedItems", JSON.stringify(unlockedItems))
   localStorage.setItem("recruiters", recruiters)
   localStorage.setItem("propagandists", propagandists)
-  // localStorage.setItem("agitators", agitators)
-  // localStorage.setItem("breakers", breakers)
 }
 
 
