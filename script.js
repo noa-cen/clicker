@@ -2,26 +2,36 @@ let counter = localStorage.getItem("counter") ? Number.parseInt(localStorage.get
 let clickPower = Number.parseInt(localStorage.getItem("clickPower")) || 1
 const unlockedItems = JSON.parse(localStorage.getItem("unlockedItems")) || []
 let upgrades = []
-const autoClickIntervals = []
+let autoClickBonus = 0;
 
 let recruiters = Number.parseInt(localStorage.getItem("recruiters")) || 0
 let propagandists = Number.parseInt(localStorage.getItem("propagandists")) || 0
-const recruiterCost = 2
-const propagandistCost = 5 
-const costMultiplier = 1.25;
+const recruiterCost = 2;
+const propagandistCost = 5;
+const costMultiplier = 1.1;
 let recruiterInterval = null
 let propagandistInterval = null
+
+
+let productionInterval = null;
+let accumulatedProduction = 0;
+
+let totalProductionPerMinute = localStorage.getItem("totalProductionPerMinute")
+  ? Number.parseFloat(localStorage.getItem("totalProductionPerMinute"))
+  : 0;
 
 
 
 function initGame() {
   document.getElementById("counter").textContent = counter
   document.getElementById("bouton").addEventListener("click", addOne)
+
   repressionLevel = 0;
   counter = 0;
-  productionPerMinute= 0;
+  totalProductionPerMinute= 0;
   currentRepression = 0;
   clickPower = 1;
+
 
   const resetButton = document.getElementById("reset-button");
   if (resetButton) {
@@ -31,18 +41,10 @@ function initGame() {
   unlockedItems.forEach((itemId) => {
     const upgrade = upgrades.find((u) => u.id === itemId)
     if (upgrade) {
-      if (upgrade.type === "autoclick") {
-        const interval = setInterval(() => {
-          counter += upgrade.amount
-          document.getElementById("counter").textContent = counter
-          saveGame()
-        }, upgrade.interval)
-        autoClickIntervals.push(interval)
-      } else if (upgrade.type === "clickPower") {
+      if (upgrade.type === "clickPower") {
         clickPower = upgrade.power
-      }
     }
-  })
+  }})
 
   upgrades.forEach((upgrade) => {
     if (!unlockedItems.includes(upgrade.id) && counter >= upgrade.cost) {
@@ -53,12 +55,34 @@ function initGame() {
   createRecruitersUI()
   createPropagandistsUI()
 
-  startRecruitersEffect()
-  startPropagandistsEffect()
+  // startRecruitersEffect()
+  // startPropagandistsEffect()
 
   updateDisplay();
+  startProductionInterval();
   hideAllContainersExceptMain();
   showContainer("main-game-container");
+}
+
+function updateProductionPerMinute() {
+  const baseProduction = 60;
+  const recruiterBonus = propagandists * 2;
+  const recruiterEfficiency = 5 + recruiterBonus;
+
+  const productionFromRecruiters = Math.floor(
+    recruiters * baseProduction * (recruiterEfficiency / 100)
+  );
+
+  let autoClickBonus = 0;
+  upgrades.forEach((upgrade) => {
+    if (upgrade.type === "autoclick" && unlockedItems.includes(upgrade.id)) {
+      autoClickBonus += upgrade.clicksPerMinute;
+    }
+  });
+
+  totalProductionPerMinute = productionFromRecruiters + autoClickBonus;
+
+  localStorage.setItem("totalProductionPerMinute", totalProductionPerMinute);
 }
 
 
@@ -93,18 +117,17 @@ function resetGame() {
   localStorage.setItem("repressionLevel",0);
 
   // Remise à zéro des variables globales
-  counter = 0;
-  productionPerMinute= 0;  
+  totalProductionPerMinute =0;
+   
   clickPower = 1;
   unlockedItems.length = 0;
   recruiters = 0;
   propagandists = 0;
+
   repressionLevel = 0;
   
   currentRepression =0;
 
-  // Au lieu de vider le container, on met à jour uniquement les valeurs affichées
-  updateDisplay();
   hideAllContainersExceptMain();
   initGameAfterReset();
 }
@@ -120,10 +143,10 @@ fetch("upgrades.json")
 
 
 function saveUnlocked(item) {
-  if (!unlockedItems.includes(item)) {
-    unlockedItems.push(item)
-    localStorage.setItem("unlockedItems", JSON.stringify(unlockedItems))
-  }
+  // if (!unlockedItems.includes(item)) {
+  unlockedItems.push(item)
+  localStorage.setItem("unlockedItems", JSON.stringify(unlockedItems))
+  // }
 }
 
 function saveGame() {
@@ -132,8 +155,7 @@ function saveGame() {
   localStorage.setItem("unlockedItems", JSON.stringify(unlockedItems))
   localStorage.setItem("recruiters", recruiters)
   localStorage.setItem("propagandists", propagandists)
-  // localStorage.setItem("agitators", agitators)
-  // localStorage.setItem("breakers", breakers)
+  localStorage.setItem("totalProductionPerMinute", totalProductionPerMinute);
 }
 
 
@@ -142,29 +164,26 @@ function initGameAfterReset() {
   repressionLevel=0;
   interval = 0;
   counter =0;
-  productionPerMinute = 0;
+  
   clickPower = 1;
-  upgrades.forEach((upgrade) => {
-    if (!unlockedItems.includes(upgrade.id) && counter >= upgrade.cost) {
-      showUpgradeButton(upgrade)
-    }
-  })
 
+  updateDisplay();
 
   createRecruitersUI()
   createPropagandistsUI()
 
-  startRecruitersEffect()
-  startPropagandistsEffect()
+  startProductionInterval();
 
-  updateDisplay();
+  // startRecruitersEffect()
+  // startPropagandistsEffect()
+
   hideAllContainersExceptMain()
   showContainer("main-game-container");
 }
 
 // ADD A REVOLUTIONNAIRE
 function addOne() {
-  counter += clickPower
+  counter += clickPower;
   document.getElementById("counter").textContent = counter
 
   saveGame()
@@ -182,7 +201,7 @@ function addOne() {
 function updateProgressBar() {
   // Calcul du pourcentage : (compteur / 8 000 000 000) * 100
   // On limite à 100% maximum avec Math.min
-  const totalPopulation = 8000;
+  const totalPopulation = 100000;
   const progress = Math.min(100, (counter / totalPopulation) * 100);
   
   // Récupérer l'élément de la barre de progression
@@ -223,20 +242,17 @@ function buyUpgrade(upgradeID) {
     document.getElementById("counter").textContent = counter
     saveGame()
     saveUnlocked(upgrade.id)
+  
 
-    if (upgrade.type === "autoclick") {
-      const interval = setInterval(() => {
-        counter += upgrade.amount
-        document.getElementById("counter").textContent = counter
-        saveGame()
-      }, upgrade.interval)
-      autoClickIntervals.push(interval)
-    } else if (upgrade.type === "clickPower") {
-      clickPower = upgrade.power
-      saveGame()
-    }
-
-    document.getElementById(upgrade.id).disabled = true
+    if (upgrade.type === "clickPower") {
+      // Pour clickPower, on ajuste clickPower
+      clickPower += upgrade.power;
+      saveGame();
+    } else { (upgrade.type === "autoclick") 
+      autoClickBonus += upgrade.clicksPerMinute;
+    } 
+    
+    document.getElementById(upgrade.id).disabled = true;
   }
 }
 
@@ -254,7 +270,7 @@ function createRecruitersUI() {
 
 
 function calculateRecruitCost() {
-  return Math.floor(recruiterCost * Math.pow(costMultiplier, recruiters))
+  return Math.floor((2*recruiterCost*(costMultiplier)*2*recruiters)+1);
 }
 
 function updateRecruitersButton() {
@@ -286,26 +302,62 @@ function buyRecruiter() {
 }
 
 
-function startRecruitersEffect() {
-  if (recruiterInterval) {
-    clearInterval(recruiterInterval)
-  }
+function startProductionInterval() {
+  if (productionInterval) clearInterval(productionInterval);
+  
+  productionInterval = setInterval(() => {
+    // 1. Calcul de la production par minute issue des recruteurs
+    //    On considère que chaque recruteur produit de la manière suivante :
+    //      productionFromRecruiters = floor(recruiters * baseProduction * (recruiterEfficiency / 100))
+    //    Où :
+    //      - baseProduction est une constante (ex. 60 révolutionnaires par minute par recruteur)
+    //      - recruiterEfficiency est 2% de base plus un bonus de 2% par propagandiste.
+    const baseProduction = 60;
+    const recruiterBonus = propagandists * 2;         // Chaque propagandiste ajoute +2 %
+    const recruiterEfficiency = 5 + recruiterBonus;
+    const productionFromRecruiters = Math.floor(recruiters * baseProduction * (recruiterEfficiency / 100));
+    
+    // 2. Calcul du bonus apporté par les upgrades de type "autoclick"
+    //    On suppose que dans le JSON, chaque upgrade de type autoclick possède la propriété "clicksPerMinute"
+    //    Le bonus total est la somme de ces valeurs pour tous les upgrades débloqués.
+    let autoClickBonus = 0;
+    upgrades.forEach(upgrade => {
+      if (upgrade.type === "autoclick" && unlockedItems.includes(upgrade.id)) {
+        autoClickBonus += upgrade.clicksPerMinute;
+      }
+    });
+    
+    // 3. Production totale par minute (constante jusqu'au prochain achat)
+    const totalProductionPerMinute = productionFromRecruiters + autoClickBonus;
+    
+    // 4. Calcul de la production par seconde (en flottant)
+    const productionPerSecond = totalProductionPerMinute / 60;
 
-  recruiterInterval = setInterval(() => {
-    if (recruiters > 0) {
-      const baseEffect = 0.001 
-      const propagandistBonus = 1 + (propagandists * 0.02);
-      const recruiterEffect = baseEffect * recruiters * propagandistBonus
-
-      const newRevolutionaries = Math.floor(counter * recruiterEffect)
-      if (newRevolutionaries > 0) {
-        counter += newRevolutionaries
-        document.getElementById("counter").textContent = counter
-        saveGame()
+    counter+= Math.floor(totalProductionPerMinute/60);
+    
+    // 5. Accumuler la production sur le temps (évite l'arrondi trop tôt)
+    accumulatedProduction += productionPerSecond;
+    const added = Math.floor(accumulatedProduction);
+    if (added > 0) {
+      counter += added;
+      accumulatedProduction -= added; // Conserver la partie fractionnaire pour le prochain cycle
+    }
+    
+    // 6. Effet des propagandistes : avec une faible probabilité, ajouter 1 recruteur
+    if (propagandists > 0 && recruiters > 0) {
+      const basePropagandistEffect = 0.0001 * propagandists; 
+      // Par exemple, si propagandists = 10, basePropagandistEffect = 0.001, soit 0.1% de chance par seconde
+      if (Math.random() < basePropagandistEffect) {
+        recruiters += 1;
       }
     }
-  }, 1000) 
+    
+    // 7. Mettre à jour l'affichage et sauvegarder l'état
+    updateDisplay();
+    saveGame();
+  }, 1000);
 }
+
 
 // PROPAGANDIST
 function createPropagandistsUI() {
@@ -321,7 +373,7 @@ function createPropagandistsUI() {
 
 
 function calculatePropagandistCost() {
-  return Math.floor(propagandistCost * Math.pow(costMultiplier, propagandists))
+  return Math.floor(propagandistCost*costMultiplier+propagandists)
 }
 
 function updatePropagandistsButton() {
@@ -347,32 +399,9 @@ function buyPropagandist() {
   }
 }
 
-
-function startPropagandistsEffect() {
-  if (propagandistInterval) {
-    clearInterval(propagandistInterval)
-  }
-
-  propagandistInterval = setInterval(() => {
-    if (propagandists > 0 && recruiters > 0) {
-      
-      const baseEffect = 0.0001
-      const propagandistEffect = baseEffect * propagandists
-
-      const newRecruiters = Math.random() < propagandistEffect ? 1 : 0
-      if (newRecruiters > 0) {
-        recruiters += newRecruiters
-        document.getElementById("recruiter-value").textContent = recruiters
-        updatePropagandistsButton()
-        saveGame()
-      }
-    }
-  }, 1000) 
-}
-
 function updateDisplay() {
+  updateProductionPerMinute();
   document.getElementById("counter").textContent = Math.floor(counter).toLocaleString('fr-FR');
-
   const recruiterValue = document.getElementById("recruiter-value")
   const propagandistValue = document.getElementById("propagandist-value")
 
@@ -384,35 +413,27 @@ function updateDisplay() {
   const recruiterBonus = propagandists * 2
   const recruiterEfficiency = 2 + recruiterBonus
   const baseProduction = 60 // révolutionnaires de base par minute par recruteur
-  const productionPerMinute = Math.floor(recruiters * baseProduction * (recruiterEfficiency / 100))
+  const productionFromRecruiters = Math.floor(recruiters * baseProduction * (recruiterEfficiency / 100));
 
+  productionPerMinute = productionFromRecruiters + Math.floor(autoClickBonus) ;
 
-  const statsElement = document.getElementById("stats")
-  
-  if (statsElement) {
-    // Nettoyage du contenu actuel
-    while (statsElement.firstChild) {
-      statsElement.removeChild(statsElement.firstChild)
+    // Mise à jour de la section des statistiques
+    const statsElement = document.getElementById("stats");
+    if (statsElement && counter>=3) {
+      
+      statsElement.innerHTML = `
+        <p>Puissance de clic : ${clickPower}</p>
+        <p>Efficacité des recruteurs : +${recruiterEfficiency}% par minute</p>
+        <p>Production par minute : ${totalProductionPerMinute} révolutionnaires</p>
+      `;
+      showContainer("stats");
     }
-
-    const powerPara = document.createElement("p")
-    powerPara.textContent = `Puissance de clic: ${clickPower}`
-    statsElement.appendChild(powerPara)
-
-    const efficiencyPara = document.createElement("p")
-    efficiencyPara.textContent = `Efficacité des recruteurs: +${recruiterEfficiency}% par minute`
-    statsElement.appendChild(efficiencyPara)
-
-    const productionPara = document.createElement("p")
-    productionPara.textContent = `Production par minute: ${productionPerMinute} révolutionnaires`
-    statsElement.appendChild(productionPara)
-  }
 
   upgrades.forEach((upgrade) => {
     if (counter >= upgrade.cost && !unlockedItems.includes(upgrade.id)) {
       showUpgradeButton(upgrade)
     }
-  })
+  });
 
   
   updateProgressBar();
@@ -422,27 +443,8 @@ function updateDisplay() {
   checkAndActivateMaluses();
 }
 
-
-
-// Déclaration globale de la liste des malus
-let malusList = [];
-
-// Chargement du fichier JSON contenant les malus
-fetch("malus.json")
-  .then((response) => response.json())
-  .then((data) => {
-    malusList = data;
-    // Une fois le JSON chargé, vous pouvez lancer votre cycle d'updates
-    startMalusCycle();
-  })
-  .catch((error) => console.error("Erreur lors du chargement du JSON des malus:", error));
-
-
-// Objet pour suivre quels malus sont actuellement activés
-const activeMaluses = {};
-
 function updateRepressionBar() {
-  let repressionLevel = counter/((2*recruiters)+(5*propagandists)+1);
+  let repressionLevel = counter/(recruiters+propagandists+1);
   if (repressionLevel > 100) {
     repressionLevel = 100;
     resetGame();
@@ -477,6 +479,24 @@ function updateRepressionBar() {
     showContainer("malus-container");
   }
 }
+
+
+// Déclaration globale de la liste des malus
+let malusList = [];
+
+// Chargement du fichier JSON contenant les malus
+fetch("malus.json")
+  .then((response) => response.json())
+  .then((data) => {
+    malusList = data;
+    // Une fois le JSON chargé, vous pouvez lancer votre cycle d'updates
+    startMalusCycle();
+  })
+  .catch((error) => console.error("Erreur lors du chargement du JSON des malus:", error));
+
+
+// Objet pour suivre quels malus sont actuellement activés
+const activeMaluses = {};
 
 
 function checkAndActivateMaluses() {
