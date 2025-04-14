@@ -11,42 +11,42 @@
     "label": "Acheter Affiche (50 Révolutionnaires)",
     "cost": 50,
     "type": "autoclick",
-    "clicksPerMinute": 14
+    "clicksPerMinute": 4
   },
   {
     "id": "megaphone",
     "label": "Acheter Mégaphone (100 Révolutionnaires)",
     "cost": 100,
     "type": "clickPower",
-    "power": 4
+    "power": 5
   },
   {
     "id": "manif",
     "label": "Acheter Manif éclair (250 Révolutionnaires)",
     "cost": 250,
     "type": "autoclick",
-    "clicksPerMinute": 45
+    "clicksPerMinute": 15
   },
   {
     "id": "comite",
     "label": "Acheter Comité local (500 Révolutionnaires)",
     "cost": 500,
     "type": "autoclick",
-    "clicksPerMinute": 50
+    "clicksPerMinute": 30
   },
   {
     "id": "reseau",
     "label": "Acheter Réseau militant (1000 Révolutionnaires)",
     "cost": 1000,
     "type": "clickPower",
-    "power": 10
+    "power": 50
   },
   {
     "id": "greve",
     "label": "Acheter Grève générale (1500 Révolutionnaires)",
     "cost": 1500,
     "type": "autoclick",
-    "clicksPerMinute": 100
+    "clicksPerMinute": 50
   },
   {
     "id": "radio",
@@ -67,7 +67,7 @@
     "label": "Acheter Soulèvement populaire (5000 Révolutionnaires)",
     "cost": 5000,
     "type": "clickPower",
-    "power": 1000
+    "power": 100
   },
   {
     "id": "assemblee",
@@ -90,7 +90,7 @@
     "label": "Acheter Réseau de contre-information (15000 Révolutionnaires)",
     "cost": 15000,
     "type": "clickPower",
-    "power": 5000,
+    "power": 500,
     "description": "La vérité circule, la révolte se propage. +5000 révolutionnaires par clic."
   },
   {
@@ -114,7 +114,7 @@
     "label": "Fonder une Commune libre (100000 Révolutionnaires)",
     "cost": 100000,
     "type": "clickPower",
-    "power": 20000,
+    "power": 1000,
     "description": "La société se transforme. Vous gagnez +20000 révolutionnaires par clic."
   },
   {
@@ -136,9 +136,9 @@
   {
     "id": "universite",
     "label": "Fonder une Université populaire (300000 Révolutionnaires)",
-    "cost": 300000,
+    "cost": 250000,
     "type": "clickPower",
-    "power": 30000,
+    "power": 10000,
     "description": "L'éducation libère les esprits. +30000 révolutionnaires par clic."
   },
   {
@@ -147,14 +147,14 @@
     "cost": 500000,
     "type": "autoclick",
     "description": "Un vaste réseau solidaire multiplie l'effort collectif. +7500 révolutionnaires toutes les 0.5s.",
-    "clicksPerMinute": 7500
+    "clicksPerMinute": 30000
   },
   {
     "id": "Alliance Mondiale",
     "label": "Sceller une Alliance révolutionnaire mondiale (1000000 Révolutionnaires)",
     "cost": 1000000,
     "type": "clickPower",
-    "power": 75000,
+    "power": 20000,
     "description": "Les peuples du monde unissent leur force. +75000 révolutionnaires par clic."
   },
   {
@@ -163,6 +163,6 @@
     "cost": 2000000,
     "type": "autoclick",
     "description": "La révolution entre dans une nouvelle phase. +15000 révolutionnaires toutes les 0.5s.",
-    "clicksPerMinute": 15000
+    "clicksPerMinute": 60000
   }
 ]

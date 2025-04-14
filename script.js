@@ -1,6 +1,13 @@
-let counter = localStorage.getItem("counter") ? Number.parseInt(localStorage.getItem("counter")) : 0
+let counter = parseInt(localStorage.getItem("counter")) || 0;
 let clickPower = Number.parseInt(localStorage.getItem("clickPower")) || 1
-const unlockedItems = JSON.parse(localStorage.getItem("unlockedItems")) || []
+
+let unlockedItems = [];
+try {
+  unlockedItems = JSON.parse(localStorage.getItem("unlockedItems")) || [];
+} catch (e) {
+  unlockedItems = [];
+}
+
 let upgrades = []
 let autoClickBonus = 0;
 
@@ -13,7 +20,7 @@ let recruiters = Number.parseInt(localStorage.getItem("recruiters")) || 0
 let propagandists = Number.parseInt(localStorage.getItem("propagandists")) || 0
 const recruiterCost = 2;
 const propagandistCost = 5;
-const costMultiplier = 1.1;
+const costMultiplier = 1.125;
 let recruiterInterval = null
 let propagandistInterval = null
 
@@ -23,7 +30,7 @@ let accumulatedProduction = 0;
 
 let totalProductionPerMinute = localStorage.getItem("totalProductionPerMinute")
   ? Number.parseFloat(localStorage.getItem("totalProductionPerMinute"))
-  : 0;
+  : 1;
 
 
 function getTitleAndChef() {
@@ -56,14 +63,14 @@ function initGame() {
 
   repressionLevel = 0;
   counter = 0;
-  totalProductionPerMinute= 0;
+  totalProductionPerMinute= 1;
   currentRepression = 0;
   clickPower = 1;
 
 
   const resetButton = document.getElementById("reset-button");
   if (resetButton) {
-  resetButton.addEventListener("click", resetGame);
+  resetButton.addEventListener("click", resetGame,initGameAfterReset);
   }
 
   unlockedItems.forEach((itemId) => {
@@ -146,7 +153,8 @@ function resetGame() {
   localStorage.setItem("repressionLevel",0);
 
   // Remise à zéro des variables globales
-  totalProductionPerMinute =0;
+  totalProductionPerMinute =1;
+  counter =0;
    
   clickPower = 1;
   unlockedItems.length = 0;
@@ -154,8 +162,8 @@ function resetGame() {
   propagandists = 0;
 
   repressionLevel = 0;
-  
   currentRepression =0;
+  updateDisplay();
 
   hideAllContainersExceptMain();
   initGameAfterReset();
@@ -191,11 +199,6 @@ function saveGame() {
 function initGameAfterReset() {
   document.getElementById("counter").textContent = counter
   repressionLevel=0;
-  interval = 0;
-  counter =0;
-  
-  clickPower = 1;
-
   updateDisplay();
 
   createRecruitersUI()
@@ -299,7 +302,7 @@ function createRecruitersUI() {
 
 
 function calculateRecruitCost() {
-  return Math.floor((2*recruiterCost*(costMultiplier)*2*recruiters)+1);
+  return Math.floor(recruiterCost*Math.pow(costMultiplier, recruiters));
 }
 
 function updateRecruitersButton() {
