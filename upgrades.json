@@ -4,39 +4,35 @@
     "label": "Acheter Tract (10 Révolutionnaires)",
     "cost": 10,
     "type": "autoclick",
-    "interval": 5000,
-    "amount": 1
+    "clicksPerMinute": 1
   },
   {
     "id": "affiche",
     "label": "Acheter Affiche (50 Révolutionnaires)",
     "cost": 50,
     "type": "autoclick",
-    "interval": 1000,
-    "amount": 1
+    "clicksPerMinute": 14
   },
   {
     "id": "megaphone",
     "label": "Acheter Mégaphone (100 Révolutionnaires)",
     "cost": 100,
     "type": "clickPower",
-    "power": 2
+    "power": 4
   },
   {
     "id": "manif",
     "label": "Acheter Manif éclair (250 Révolutionnaires)",
     "cost": 250,
     "type": "autoclick",
-    "interval": 1000,
-    "amount": 5
+    "clicksPerMinute": 45
   },
   {
     "id": "comite",
     "label": "Acheter Comité local (500 Révolutionnaires)",
     "cost": 500,
     "type": "autoclick",
-    "interval": 1000,
-    "amount": 10
+    "clicksPerMinute": 50
   },
   {
     "id": "reseau",
@@ -50,24 +46,21 @@
     "label": "Acheter Grève générale (1500 Révolutionnaires)",
     "cost": 1500,
     "type": "autoclick",
-    "interval": 1000,
-    "amount": 25
+    "clicksPerMinute": 100
   },
   {
     "id": "radio",
     "label": "Acheter Radio pirate (2000 Révolutionnaires)",
     "cost": 2000,
     "type": "autoclick",
-    "interval": 1000,
-    "amount": 50
+    "clicksPerMinute": 100
   },
   {
     "id": "journal",
     "label": "Acheter Journal clandestin (2500 Révolutionnaires)",
     "cost": 2500,
     "type": "autoclick",
-    "interval": 1000,
-    "amount": 100
+    "clicksPerMinute": 200
   },
   {
     "id": "soulevement",
@@ -81,18 +74,16 @@
     "label": "Acheter Assemblée insurrectionnelle (7500 Révolutionnaires)",
     "cost": 7500,
     "type": "autoclick",
-    "interval": 1000,
-    "amount": 250,
-    "description": "Un parlement du peuple s’installe, qui organise la résistance. +250 révolutionnaires par seconde."
+    "description": "Un parlement du peuple s’installe, qui organise la résistance. +250 révolutionnaires par seconde.",
+    "clicksPerMinute": 500
   },
   {
     "id": "milice",
     "label": "Acheter Milice du peuple (10000 Révolutionnaires)",
     "cost": 10000,
     "type": "autoclick",
-    "interval": 1000,
-    "amount": 500,
-    "description": "Des groupes d’autodéfense assurent la sécurité révolutionnaire. +500 révolutionnaires par seconde."
+    "description": "Des groupes d’autodéfense assurent la sécurité révolutionnaire. +500 révolutionnaires par seconde.",
+    "clicksPerMinute": 500
   },
   {
     "id": "contreinfo",
@@ -107,18 +98,16 @@
     "label": "Acheter Soutien international (25000 Révolutionnaires)",
     "cost": 25000,
     "type": "autoclick",
-    "interval": 500,
-    "amount": 1000,
-    "description": "Des camarades du monde entier rejoignent la lutte. +1000 révolutionnaires toutes les 0.5s."
+    "description": "Des camarades du monde entier rejoignent la lutte. +1000 révolutionnaires toutes les 0.5s.",
+    "clicksPerMinute": 1000
   },
   {
     "id": "autogestion",
     "label": "Acheter Zone en autogestion (50000 Révolutionnaires)",
     "cost": 50000,
     "type": "autoclick",
-    "interval": 500,
-    "amount": 2500,
-    "description": "Un territoire libéré s’organise sans hiérarchie. +2500 révolutionnaires toutes les 0.5s."
+    "description": "Un territoire libéré s’organise sans hiérarchie. +2500 révolutionnaires toutes les 0.5s.",
+    "clicksPerMinute": 2000
   },
   {
     "id": "commune",
@@ -133,8 +122,47 @@
     "label": "Proclamer l'Utopie (250000 Révolutionnaires)",
     "cost": 250000,
     "type": "autoclick",
-    "interval": 100,
-    "amount": 10000,
-    "description": "Le rêve devient réalité. +10000 révolutionnaires toutes les 0.1s."
-  }  
+    "description": "Le rêve devient réalité. +5000 révolutionnaires par minute.",
+    "clicksPerMinute": 5000
+  },
+  {
+    "id": "hacker",
+    "label": "Recruter un Hacker anarchiste (125000 Révolutionnaires)",
+    "cost": 125000,
+    "type": "autoclick",
+    "description": "Il pirate les systèmes ennemis pour rediriger les ressources. +3000 révolutionnaires toutes les 0.5s.",
+    "clicksPerMinute": 3000
+  },
+  {
+    "id": "universite",
+    "label": "Fonder une Université populaire (300000 Révolutionnaires)",
+    "cost": 300000,
+    "type": "clickPower",
+    "power": 30000,
+    "description": "L'éducation libère les esprits. +30000 révolutionnaires par clic."
+  },
+  {
+    "id": "reseau_autogere",
+    "label": "Créer un Réseau d'entraide autogéré (500000 Révolutionnaires)",
+    "cost": 500000,
+    "type": "autoclick",
+    "description": "Un vaste réseau solidaire multiplie l'effort collectif. +7500 révolutionnaires toutes les 0.5s.",
+    "clicksPerMinute": 7500
+  },
+  {
+    "id": "Alliance Mondiale",
+    "label": "Sceller une Alliance révolutionnaire mondiale (1000000 Révolutionnaires)",
+    "cost": 1000000,
+    "type": "clickPower",
+    "power": 75000,
+    "description": "Les peuples du monde unissent leur force. +75000 révolutionnaires par clic."
+  },
+  {
+    "id": "transformation",
+    "label": "Entamer une Transformation radicale (2000000 Révolutionnaires)",
+    "cost": 2000000,
+    "type": "autoclick",
+    "description": "La révolution entre dans une nouvelle phase. +15000 révolutionnaires toutes les 0.5s.",
+    "clicksPerMinute": 15000
+  }
 ]
