@@ -98,16 +98,23 @@ p{
 }
 
 #chef-img{
-    width: 90px;
+    width: 100px;
     height: auto;
+    position: relative;
+    left: 2px;
+    top: 3px;
+    object-fit: cover ;
+    z-index: 1000;
 }
 
 .chef-button{
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: end;
     height: 80px;
-    width: 90px
+    width: 85px;
+    background-color: rgb(255, 139, 139);
+    border: solid black;
  }
 
 

@@ -1,79 +1,65 @@
-<!DOCTYPE html> 
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
-  
-
-  <title>Click CLick Boom</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>ClickCLickBoom</title>
+    <link rel="stylesheet" href="launcher.css">
+    <script src="launcher.js" defer></script>
+    
 </head>
+
 <body>
-  <header>
-    <button id="reset-button" class="reset-button">DO NOT PUSH</button>
-    <h1>Click Click Boom</h1>
-    <button class="chef-button" id="pause"><img id="chef-img"></img></button>
-  </header>
+    <header>
+        <h1>Click Click Boom</h1>
+    </header>
 
-  <main>
-    <section id="secondblock">
-      <article id="repression-container" class="game-container repression-container">
-        <h2>REPRESSION</h2>
-        <div class="progress-container">
-          <div id="repression-bar" class="progress-bar repression-bar">0%</div>
+    <main>
+        <div id="description" class="description-container"></div>
 
-        </div>
+        <div class="form-container">
+            <form id="revolution-form" class="revolution-form">
+
+                <div class="name-revolution">
+                    <label for="parti">Nom de votre Parti</label>
+                <input type="text" id="parti" name="parti" required></div>
+
+                <div class="chef-revolution">
+                    <label for="chef-image">Qui mène votre révolution ?</label>
+
+                    <div class="image-selector">
+                        <input type="radio" id="chef1" name="chef-image" value="chef1">
+                        <label for="chef1">
+                            <img src="img/chef1.png" alt="Rachel keke" class="chef-image" data-image="img/chef1.png">
+                            <h4 class="text">RACHEL</h4>
+                        </label>
         
-        <p id="malus-message" class="malus-message"></p>
-      </article>
-
-      <article id="special-upgrades" class="game-container">
-        <h2>Bonus & Améliorations</h2>
-      </article>
-
-      <article id="malus-container" class="game-container">
-        <div id="maluses" >
-          <h2>Malus  </h2>
-        </div>
-      </article>
-    </section>
-
-    <section id="firstblock">
-      <article id="main-game-container" class="game-container main-game-container">
-        <h2 id="title-revolution"></h2>
-      
-        <button class="title" id="bouton">ON N'ARRÊTE PAS UN PEUPLE QUI CLICK</button>
-        <p><span id="counter">0</span> révolutionnaires sont en révolution.</p>
-  
-        <div id="progress-container" class="progress-container">
-          <div id="progress-bar" class="progress-bar">0%</div>
-        </div>
-      </article>
-    </section>
-
-    <section id="thirdblock">
-      <article id="unit-container" class="game-container">
-        <!-- <h2>Unités Révolutionnaires</h2> -->
-  
-        <h3 id="recruiter-count">
-          Recruteurs: <span id="recruiter-value">0</span>
-        </h3>
-        <button id="buy-recruiter" class="button upgrade-button">Former un recruteur</button>
+                        <input type="radio" id="chef2" name="chef-image" value="chef2">
+                        <label for="chef2">
+                            <img src="img/chef2.png" alt="Marx" class="chef-image" data-image="img/chef2.png">
+                            <h4 class="text">KARL</h4>
+                            
+                        </label>
         
-        <h3 id="propagandist-count">
-          Propagandistes: <span id="propagandist-value">0</span>
-        </h3>
-        <button id="buy-propagandist" class="button upgrade-button">Former un propagandiste</button>
-      </article> 
+                        <input type="radio" id="chef3" name="chef-image" value="chef3">
+                        <label for="chef3">
+                            <img src="img/chef3.png" alt="Olympe de Gouges" class="chef-image" data-image="img/chef3.png">
+                            <h4 class="text">OLYMPE</h4>
+                        </label>
+                    </div>
+                </div>
 
-      <article id="stats" class="game-container stats-container">
-        <h3>STATS</h3>
-      </article>
-    </section>
-  </main>
+                <div class="container">
+                    <button type="submit">Let's start the Revolution</button>
+                </div>
+            </form>
+        </div>
+        <div id="toast" class="toast">Toutes les bonnes choses ont un début!</div>
+    </main>
+
+    <footer></footer>
 </body>
 </html>

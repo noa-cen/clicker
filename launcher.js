@@ -10,31 +10,56 @@ document.addEventListener("DOMContentLoaded", () => {
         partiInput.value = savedParti;
     }
     if (savedChefImage) {
-        document.getElementById(savedChefImage).checked = true;
+        const selected = document.querySelector(`img[data-image="${savedChefImage}"]`);
+        if (selected) selected.classList.add("selected");
     }
+
+    const chefImages = document.querySelectorAll(".chef-image");
+    let selectedChef = null;
+
+    chefImages.forEach(chef => {
+        chef.addEventListener("click", () => {
+            // Retirer la sélection précédente
+            chefImages.forEach(img => img.classList.remove("selected"));
+            // Ajouter la nouvelle sélection
+            chef.classList.add("selected");
+            selectedChef = chef.getAttribute("data-image");
+            localStorage.setItem("chef-image", selectedChef);
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const chefImage = document.getElementById("chef-image");
+        const savedChefImage = localStorage.getItem("chef-image");
+    
+        if (savedChefImage) {
+            chefImage.src = savedChefImage;
+        }
+    });
+
+    localStorage.getItem("chef-image")
+
 
     form.addEventListener("submit", (event) => {
         event.preventDefault();
 
-        const parti = partiInput.value;
-        const chefImages = document.querySelectorAll(".chef-image");
+        const parti = partiInput.value.trim();
 
-        if (parti){
+        if (parti) {
             localStorage.setItem("parti", parti);
         }
 
-        chefImages.forEach(chef=>{
-            chef.addEventListener("click",()=>{
-                const chefId = chefImages.id;
-                localStorage.setItem("chef-image",chefId);
-             })
-        })
+        if (!selectedChef) {
+            alert("Choisissez un.e chef.fe !");
+            return;
+        }
 
         showToast("Toutes les bonnes choses ont un début !");
         setTimeout(() => {
-            window.location.href = "index.html";
+            window.location.href = "game.html";
         }, 2000);
     });
+    
 
     const descriptions = {
         chef1: "Rachel Keke, militante ouvrière, a mené la grève de l'hôtel Ibis en 2019 pour de meilleures conditions de travail.",
@@ -66,13 +91,13 @@ document.addEventListener("DOMContentLoaded", () => {
         chef3Label.addEventListener("mouseover", () => updateDescription("chef3"));
         chef3Label.addEventListener("mouseout", () => descriptionContainer.style.display = "none");
     }
-});
 
-function showToast(message) {
-    const toast = document.getElementById("toast");
-    toast.textContent = message;
-    toast.classList.add("show");
-    setTimeout(() => {
-        toast.classList.remove("show");
-    }, 4000); 
-}
+
+    function showToast(message) {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.classList.add("show");
+        setTimeout(() => {
+            toast.classList.remove("show");
+        }, 4000); 
+}}); 

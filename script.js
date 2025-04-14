@@ -4,6 +4,11 @@ const unlockedItems = JSON.parse(localStorage.getItem("unlockedItems")) || []
 let upgrades = []
 let autoClickBonus = 0;
 
+// Appel à l'ouverture de la page
+document.addEventListener("DOMContentLoaded", () => {
+  getTitleAndChef();
+});
+
 let recruiters = Number.parseInt(localStorage.getItem("recruiters")) || 0
 let propagandists = Number.parseInt(localStorage.getItem("propagandists")) || 0
 const recruiterCost = 2;
@@ -34,8 +39,13 @@ function getTitleAndChef() {
     titleElement.textContent = "REVOLUTION";
   }
 
-  if(storedChef){
-    chefElement.src = `img/${storedChef}.png`;
+  // Met à jour l'image du chef
+  if (storedChef) {
+    chefElement.src = storedChef;
+    chefElement.alt = "Chef du parti";
+  } else {
+    chefElement.src = "img/default-chef.png"; // une image par défaut au cas où
+    chefElement.alt = "Chef inconnu";
   }
 }
 
