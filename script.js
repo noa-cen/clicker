@@ -13,6 +13,24 @@ let recruiterInterval = null
 let propagandistInterval = null
 
 
+function getTitleAndChef() {
+  const titleElement = document.getElementById("title-revolution");
+  const chefElement = document.getElementById("chef-img");
+
+  const storedParti = localStorage.getItem("parti");
+  const storedChef = localStorage.getItem("chef-image");
+
+  if (storedParti) {
+    titleElement.textContent = storedParti;
+  } else {
+    titleElement.textContent = "REVOLUTION";
+  }
+
+  if(storedChef){
+    chefElement.src = `img/${storedChef}.png`;
+  }
+}
+
 
 function initGame() {
   document.getElementById("counter").textContent = counter
@@ -59,7 +77,10 @@ function initGame() {
   updateDisplay();
   hideAllContainersExceptMain();
   showContainer("main-game-container");
+  getTitleAndChef();
 }
+
+
 
 
 

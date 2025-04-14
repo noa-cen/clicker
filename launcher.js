@@ -17,12 +17,18 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault();
 
         const parti = partiInput.value;
-        const chefImage = document.querySelector('input[name="chef-image"]:checked')?.value;
+        const chefImages = document.querySelector(".chef-image");
 
-        localStorage.setItem("parti", parti);
-        if (chefImage) {
-            localStorage.setItem("chef-image", chefImage);
+        if (parti){
+            localStorage.setItem("parti", parti);
         }
+
+        chefImages.foreach(chef=>{
+            chef.addEventListener("click",()=>{
+                const chefId = chefImages.id;
+                localStorage.setItem("chef-image",chefId);
+             })
+        })
 
         showToast("Toutes les bonnes choses ont un début !");
         setTimeout(() => {
@@ -36,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
         chef3: "Olympe de Gouges, dramaturge et militante féministe, a écrit la Déclaration des droits de la femme en 1791."
     };
 
-    // Placer la description au-dessus du formulaire
     const formContainer = document.querySelector('.form-container');
     formContainer.parentNode.insertBefore(descriptionContainer, formContainer);
 
@@ -45,12 +50,10 @@ document.addEventListener("DOMContentLoaded", () => {
         descriptionContainer.textContent = descriptions[chefId];
     };
 
-    // Get the labels instead of the inputs
     const chef1Label = document.querySelector('label[for="chef1"]');
     const chef2Label = document.querySelector('label[for="chef2"]');
     const chef3Label = document.querySelector('label[for="chef3"]');
 
-    // Attach event listeners to the labels
     if (chef1Label) {
         chef1Label.addEventListener("mouseover", () => updateDescription("chef1"));
         chef1Label.addEventListener("mouseout", () => descriptionContainer.style.display = "none");
