@@ -1,17 +1,16 @@
-let counter         = Number(localStorage.getItem("counter")) || 0;
-let clickPower      = Number(localStorage.getItem("clickPower")) || 1;
-const unlockedItems = JSON.parse(localStorage.getItem("unlockedItems")) || [];
-let upgrades        = [];
-const autoClickIntervals = [];
+let counter = localStorage.getItem("counter") ? Number.parseInt(localStorage.getItem("counter")) : 0
+let clickPower = Number.parseInt(localStorage.getItem("clickPower")) || 1
+const unlockedItems = JSON.parse(localStorage.getItem("unlockedItems")) || []
+let upgrades = []
+const autoClickIntervals = []
 
-let recruiters      = Number(localStorage.getItem("recruiters")) || 0;
-let propagandists   = Number(localStorage.getItem("propagandists")) || 0;
-const recruiterCost   = 2;
-const propagandistCost = 5;
-const costMultiplier  = 1.25;
-
-let recruiterInterval = null;
-let propagandistInterval = null;
+let recruiters = Number.parseInt(localStorage.getItem("recruiters")) || 0
+let propagandists = Number.parseInt(localStorage.getItem("propagandists")) || 0
+const recruiterCost = 2
+const propagandistCost = 5 
+const costMultiplier = 1.25;
+let recruiterInterval = null
+let propagandistInterval = null
 
 
 
@@ -19,6 +18,8 @@ function initGame() {
   document.getElementById("counter").textContent = counter
   document.getElementById("bouton").addEventListener("click", addOne)
   repressionLevel = 0;
+  counter = 0;
+  productionPerMinute= 0;
   currentRepression = 0;
   clickPower = 1;
 
@@ -54,7 +55,6 @@ function initGame() {
 
   startRecruitersEffect()
   startPropagandistsEffect()
-  productionPerMinute= 0;
 
   updateDisplay();
   hideAllContainersExceptMain();
@@ -94,12 +94,14 @@ function resetGame() {
 
   // Remise à zéro des variables globales
   counter = 0;
+  productionPerMinute= 0;  
   clickPower = 1;
   unlockedItems.length = 0;
   recruiters = 0;
   propagandists = 0;
   repressionLevel = 0;
-  productionPerMinute= 0;
+  
+  currentRepression =0;
 
   // Au lieu de vider le container, on met à jour uniquement les valeurs affichées
   updateDisplay();
@@ -138,12 +140,16 @@ function saveGame() {
 function initGameAfterReset() {
   document.getElementById("counter").textContent = counter
   repressionLevel=0;
+  interval = 0;
+  counter =0;
+  productionPerMinute = 0;
   clickPower = 1;
   upgrades.forEach((upgrade) => {
     if (!unlockedItems.includes(upgrade.id) && counter >= upgrade.cost) {
       showUpgradeButton(upgrade)
     }
   })
+
 
   createRecruitersUI()
   createPropagandistsUI()
@@ -176,7 +182,7 @@ function addOne() {
 function updateProgressBar() {
   // Calcul du pourcentage : (compteur / 8 000 000 000) * 100
   // On limite à 100% maximum avec Math.min
-  const totalPopulation = 5000;
+  const totalPopulation = 8000;
   const progress = Math.min(100, (counter / totalPopulation) * 100);
   
   // Récupérer l'élément de la barre de progression
@@ -436,12 +442,11 @@ fetch("malus.json")
 const activeMaluses = {};
 
 function updateRepressionBar() {
-  let repressionLevel = counter/(recruiters+propagandists+1);
-  repressionLevel += 0.05; // Ajustez la vitesse d'augmentation si nécessaire
+  let repressionLevel = counter/((2*recruiters)+(5*propagandists)+1);
   if (repressionLevel > 100) {
     repressionLevel = 100;
     resetGame();
-    updateDisplay();
+    return
   } else if (repressionLevel<=1) {repressionLevel=1;}
 
   if (repressionLevel>=2) {showContainer("repression-container");}
@@ -475,13 +480,6 @@ function updateRepressionBar() {
 
 
 function checkAndActivateMaluses() {
-  let repressionLevel = counter/(recruiters+propagandists+(counter*0.5));
-  repressionLevel += 0.1;
-  if (repressionLevel > 100) {
-    repressionLevel = 100;
-    resetGame();
-    initGameAfterReset();
-  }
   const currentRepression = repressionLevel; // Ce pourcentage sert à déclencher les malus
   
   const malusContainer = document.getElementById("maluses");
