@@ -3,17 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClickCLick</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>ClickCLickBoom</title>
     <link rel="stylesheet" href="launcher.css">
     <script src="launcher.js" defer></script>
+    
 </head>
 
 <body>
     <header>
-        <h1>Clicker Revolution</h1>
+        <h1>Click Click Boom</h1>
     </header>
 
     <main>
+        <div id="description" class="description-container"></div>
+
         <div class="form-container">
             <form id="revolution-form" class="revolution-form">
 
@@ -25,33 +31,35 @@
                     <label for="chef-image">Qui mène votre révolution ?</label>
 
                     <div class="image-selector">
-                        <input type="radio" id="chef1" name="Rachel" value="chef1">
+                        <input type="radio" id="chef1" name="chef-image" value="chef1">
                         <label for="chef1">
                             <img src="img/RACHELKEKE.png" alt="Rachel keke" class="chef-image">
-                            <h4>RACHEL</h4>
+                            <h4 class="text">RACHEL</h4>
                         </label>
         
-                        <input type="radio" id="chef2" name="Karl" value="chef2">
+                        <input type="radio" id="chef2" name="chef-image" value="chef2">
                         <label for="chef2">
                             <img src="img/MARX.png" alt="Marx" class="chef-image">
-                            <h4>KARL</h4>
+                            <h4 class="text">KARL</h4>
+                            
                         </label>
         
-                        <input type="radio" id="chef3" name="Olympe" value="chef3">
+                        <input type="radio" id="chef3" name="chef-image" value="chef3">
                         <label for="chef3">
                             <img src="img/OLYMPE.png" alt="Olympe de Gouges" class="chef-image">
-                            <h4>OLYMPE</h4>
+                            <h4 class="text">OLYMPE</h4>
                         </label>
                     </div>
                 </div>
 
                 <div class="container">
-                    <a href="index.html"><button>Let's start the Revolution</button></a>
+                    <button type="submit">Let's start the Revolution</button>
                 </div>
             </form>
         </div>
+        <div id="toast" class="toast">Toutes les bonnes choses ont un début!</div>
     </main>
 
-    <footer>Revolution on click</footer>
+    <footer></footer>
 </body>
 </html>

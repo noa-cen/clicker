@@ -1,3 +1,11 @@
+:root{
+    --font-1: "Press Start 2P", system-ui ;
+    --font-2: "Albert Sans", sans-serif;
+    --black-: #333;
+    --red-: #bc3a3a;
+    --white-: #fff;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,12 +14,13 @@
 
 main{
     display: flex;
+    flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
 }
 
 body {
-    font-family: "Press Start 2P", system-ui;
+    font-family: var(--font-1);
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
@@ -27,11 +36,12 @@ body {
 header {
     text-align: center;
     margin-bottom: 20px;
+    width: 100%;
 }
 
 h1 {
-    font-size: 2em;
-    color: #fffbfb;
+    font-size: 1.5em;
+    color: var(--white-);
     text-transform: uppercase;
     padding: 1em 0 0 0;
 }
@@ -46,13 +56,14 @@ h1 {
 }
 
 .form-container {
-    background-color: #fff;
+    background-color: var(--white-);
     padding: 20px;
     border-radius: 0px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 90%; 
-    max-width: 400px;
     text-align: center;
+    justify-content: center;
+    align-items: center;
 }
 
 
@@ -64,7 +75,7 @@ label {
     display: block;
     font-size: 1.2em;
     margin-bottom: 10px;
-    color: #333;
+    color: var(--black-);
 }
 
 input[type="text"] {
@@ -75,6 +86,27 @@ input[type="text"] {
     border-radius: 0px;
 }
 
+.description-container {
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    background-color: #f4f4f4;
+    border-radius: 5px;
+    display: none; 
+    font-family: var(--font-2);
+    color: var(--black-);
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: absolute; 
+    z-index: 10;
+    top: 5em;
+    left: 50%;
+    transform: translateX(-50%); 
+    width: 80%;
+}
 
 .image-selector {
     display: flex;
@@ -90,11 +122,15 @@ input[type="text"] {
 
 .image-selector label {
     cursor: pointer;
+    position: relative;
+    text-align: center;
     width: 30%;
     display: inline-block;
     transition: transform 0.3s ease;
     margin-bottom: 10px;
 }
+
+
 
 .chef-image {
     width: 90px;
@@ -110,23 +146,30 @@ input[type="text"] {
     transform: scale(1.3);
 }
 
+.text{
+    font-family: var(--font-2);
+    margin: 10px;
+}
+
 .container{
     width: 70%;
     text-align: center;
     display: block;
     margin-left: auto;
-    margin-right: auto
+    margin-right: auto;
 }
 
 button {
-    color: #fff;
-    background-color: #bc3a3a;
+    color: var(--white-);
+    background-color: var(--red-);
     padding: 15px 40px 15px 40px;
     margin: 10px;
     border: 0;
     box-shadow: 0px 5px black, 0px -5px black, 5px 0px black, -5px 0px black, 0px 10px #00000038, 5px 5px #00000038, -5px 5px #00000038, inset 0px 5px #ffffff36 ;
     cursor: pointer;
     width: 100%;
+    font-family: var(--font-2);
+    font-size: 1em;
 }
 
 button:active {
@@ -134,5 +177,28 @@ transform: translateY(5px);
 box-shadow: 0px 5px black, 0px -5px black, 5px 0px black, -5px 0px black,inset 0px 5px #00000038;
 }
 
-
+.toast {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: var(--red-);
+    color: var(--white-);
+    text-align: center;
+    border-radius: 12px;
+    padding: 16px 24px;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 30px;
+    transform: translateX(-50%);
+    font-size: 1em;
+    opacity: 0;
+    transition: opacity 0.5s, visibility 0.5s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+  
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+}
+  
 
