@@ -8,13 +8,10 @@ try {
   unlockedItems = [];
 }
 
+let repressionLevel = 1;
+
 let upgrades = []
 let autoClickBonus = 0;
-
-// Appel à l'ouverture de la page
-document.addEventListener("DOMContentLoaded", () => {
-  getTitleAndChef();
-});
 
 let recruiters = Number.parseInt(localStorage.getItem("recruiters")) || 0
 let propagandists = Number.parseInt(localStorage.getItem("propagandists")) || 0
@@ -32,6 +29,10 @@ let totalProductionPerMinute = localStorage.getItem("totalProductionPerMinute")
   ? Number.parseFloat(localStorage.getItem("totalProductionPerMinute"))
   : 1;
 
+  document.addEventListener("DOMContentLoaded", () => {
+    getTitleAndChef();
+  });
+
 
 function getTitleAndChef() {
   const titleElement = document.getElementById("title-revolution");
@@ -46,7 +47,7 @@ function getTitleAndChef() {
     titleElement.textContent = "REVOLUTION";
   }
 
-  // Met à jour l'image du chef
+  // update LEADER
   if (storedChef) {
     chefElement.src = storedChef;
     chefElement.alt = "Chef du parti";
@@ -55,6 +56,19 @@ function getTitleAndChef() {
     chefElement.alt = "Chef inconnu";
   }
 }
+
+
+function updateProgressBar() {
+  const totalPopulation = 10000;
+  const progress = Math.min(100, (counter / totalPopulation) * 100);
+  
+  const progressBar = document.getElementById("progress-bar");
+  
+  progressBar.style.width = progress + "%";
+  
+  progressBar.textContent = Math.floor(progress) + "%";
+}
+
 
 
 function initGame() {
@@ -90,9 +104,6 @@ function initGame() {
   createRecruitersUI()
   createPropagandistsUI()
 
-  // startRecruitersEffect()
-  // startPropagandistsEffect()
-
   updateDisplay();
   startProductionInterval();
   hideAllContainersExceptMain();
@@ -121,8 +132,6 @@ function updateProductionPerMinute() {
   localStorage.setItem("totalProductionPerMinute", totalProductionPerMinute);
 }
 
-
-
 function hideAllContainersExceptMain() {
   document.querySelectorAll("article").forEach(article => {
     if (article.id !== "main-game-container") {
@@ -142,9 +151,8 @@ function showContainer(containerId) {
 }
 
 
-
 function resetGame() {
-  // Réinitialisation des données dans le localStorage
+  // Reset local storage
   localStorage.setItem("counter", 0);
   localStorage.setItem("clickPower", 1);
   localStorage.setItem("unlockedItems", JSON.stringify([]));
@@ -152,7 +160,7 @@ function resetGame() {
   localStorage.setItem("propagandists", 0);
   localStorage.setItem("repressionLevel",0);
 
-  // Remise à zéro des variables globales
+  // Reset variable
   totalProductionPerMinute =1;
   counter =0;
    
@@ -180,10 +188,8 @@ fetch("upgrades.json")
 
 
 function saveUnlocked(item) {
-  // if (!unlockedItems.includes(item)) {
   unlockedItems.push(item)
   localStorage.setItem("unlockedItems", JSON.stringify(unlockedItems))
-  // }
 }
 
 function saveGame() {
@@ -206,9 +212,6 @@ function initGameAfterReset() {
 
   startProductionInterval();
 
-  // startRecruitersEffect()
-  // startPropagandistsEffect()
-
   hideAllContainersExceptMain()
   showContainer("main-game-container");
 }
@@ -229,23 +232,6 @@ function addOne() {
   updateRecruitersButton()
   updatePropagandistsButton()
 }
-
-function updateProgressBar() {
-  // Calcul du pourcentage : (compteur / 8 000 000 000) * 100
-  // On limite à 100% maximum avec Math.min
-  const totalPopulation = 100000;
-  const progress = Math.min(100, (counter / totalPopulation) * 100);
-  
-  // Récupérer l'élément de la barre de progression
-  const progressBar = document.getElementById("progress-bar");
-  
-  // Appliquer le style : la largeur correspond au pourcentage calculé
-  progressBar.style.width = progress + "%";
-  
-  // Mettre à jour le texte affiché dans la barre
-  progressBar.textContent = Math.floor(progress) + "%";
-}
-
 // UPGRADES BUTTON
 function showUpgradeButton(upgrade) {
   showContainer("special-upgrades")
@@ -262,7 +248,6 @@ function showUpgradeButton(upgrade) {
       btn.disabled = true
     }
   }
-  
 }
 
 // BUY UPGRADES
@@ -277,7 +262,6 @@ function buyUpgrade(upgradeID) {
   
 
     if (upgrade.type === "clickPower") {
-      // Pour clickPower, on ajuste clickPower
       clickPower += upgrade.power;
       saveGame();
     } else { (upgrade.type === "autoclick") 
@@ -338,53 +322,38 @@ function startProductionInterval() {
   if (productionInterval) clearInterval(productionInterval);
   
   productionInterval = setInterval(() => {
-    // 1. Calcul de la production par minute issue des recruteurs
-    //    On considère que chaque recruteur produit de la manière suivante :
-    //      productionFromRecruiters = floor(recruiters * baseProduction * (recruiterEfficiency / 100))
-    //    Où :
-    //      - baseProduction est une constante (ex. 60 révolutionnaires par minute par recruteur)
-    //      - recruiterEfficiency est 2% de base plus un bonus de 2% par propagandiste.
+
     const baseProduction = 60;
-    const recruiterBonus = propagandists * 2;         // Chaque propagandiste ajoute +2 %
+    const recruiterBonus = propagandists * 2;         // each propagandiste add +2 %
     const recruiterEfficiency = 5 + recruiterBonus;
     const productionFromRecruiters = Math.floor(recruiters * baseProduction * (recruiterEfficiency / 100));
     
-    // 2. Calcul du bonus apporté par les upgrades de type "autoclick"
-    //    On suppose que dans le JSON, chaque upgrade de type autoclick possède la propriété "clicksPerMinute"
-    //    Le bonus total est la somme de ces valeurs pour tous les upgrades débloqués.
     let autoClickBonus = 0;
     upgrades.forEach(upgrade => {
       if (upgrade.type === "autoclick" && unlockedItems.includes(upgrade.id)) {
         autoClickBonus += upgrade.clicksPerMinute;
       }
     });
-    
-    // 3. Production totale par minute (constante jusqu'au prochain achat)
+
     const totalProductionPerMinute = productionFromRecruiters + autoClickBonus;
     
-    // 4. Calcul de la production par seconde (en flottant)
     const productionPerSecond = totalProductionPerMinute / 60;
 
     counter+= Math.floor(totalProductionPerMinute/60);
     
-    // 5. Accumuler la production sur le temps (évite l'arrondi trop tôt)
     accumulatedProduction += productionPerSecond;
     const added = Math.floor(accumulatedProduction);
     if (added > 0) {
       counter += added;
-      accumulatedProduction -= added; // Conserver la partie fractionnaire pour le prochain cycle
+      accumulatedProduction -= added;
     }
     
-    // 6. Effet des propagandistes : avec une faible probabilité, ajouter 1 recruteur
     if (propagandists > 0 && recruiters > 0) {
       const basePropagandistEffect = 0.0001 * propagandists; 
-      // Par exemple, si propagandists = 10, basePropagandistEffect = 0.001, soit 0.1% de chance par seconde
       if (Math.random() < basePropagandistEffect) {
         recruiters += 1;
       }
     }
-    
-    // 7. Mettre à jour l'affichage et sauvegarder l'état
     updateDisplay();
     saveGame();
   }, 1000);
@@ -444,12 +413,12 @@ function updateDisplay() {
 
   const recruiterBonus = propagandists * 2
   const recruiterEfficiency = 2 + recruiterBonus
-  const baseProduction = 60 // révolutionnaires de base par minute par recruteur
+  const baseProduction = 60 
   const productionFromRecruiters = Math.floor(recruiters * baseProduction * (recruiterEfficiency / 100));
 
   productionPerMinute = productionFromRecruiters + Math.floor(autoClickBonus) ;
 
-    // Mise à jour de la section des statistiques
+    // update stats
     const statsElement = document.getElementById("stats");
     if (statsElement && counter>=3) {
       
@@ -486,17 +455,14 @@ function updateRepressionBar() {
   if (repressionLevel>=2) {showContainer("repression-container");}
 
   const repressionBar = document.getElementById("repression-bar");
-  // On s'assure que la valeur est comprise entre 0 et 100
   const percent = Math.min(100, Math.max(0, repressionLevel));
   
-  // Mise à jour de la largeur de la barre, du texte et déclenche la transition CSS
+  // update bar width & color
   repressionBar.style.width = percent + "%";
   repressionBar.textContent = Math.floor(percent) + "%";
 
-  // Retire les anciennes classes de couleur pour pouvoir en ajouter la nouvelle
   repressionBar.classList.remove("repression-low", "repression-med-low", "repression-med-high", "repression-high");
 
-  // Application dynamique de la classe de couleur en fonction des seuils
   if (percent < 25) {
     repressionBar.classList.add("repression-low");
   } else if (percent < 50) {
@@ -513,52 +479,44 @@ function updateRepressionBar() {
 }
 
 
-// Déclaration globale de la liste des malus
-let malusList = [];
+// // MALUS ___________________________________________
+// let malusList = [];
 
-// Chargement du fichier JSON contenant les malus
-fetch("malus.json")
-  .then((response) => response.json())
-  .then((data) => {
-    malusList = data;
-    // Une fois le JSON chargé, vous pouvez lancer votre cycle d'updates
-    startMalusCycle();
-  })
-  .catch((error) => console.error("Erreur lors du chargement du JSON des malus:", error));
+// fetch("malus.json")
+//   .then((response) => response.json())
+//   .then((data) => {
+//     malusList = data;
+//     startMalusCycle();
+//   })
+//   .catch((error) => console.error("Erreur lors du chargement du JSON des malus:", error));
 
-
-// Objet pour suivre quels malus sont actuellement activés
-const activeMaluses = {};
+// const activeMaluses = {};
 
 
-function checkAndActivateMaluses() {
-  const currentRepression = repressionLevel; // Ce pourcentage sert à déclencher les malus
+// function checkAndActivateMaluses() {
+//   const currentRepression = repressionLevel; 
   
-  const malusContainer = document.getElementById("maluses");
-  if (!malusContainer) return;
+//   const malusContainer = document.getElementById("malus-container");
+//   if (!malusContainer) return;
 
-  // Pour chaque malus défini dans le JSON, vérifie si son seuil est dépassé et qu'il n'est pas déjà actif
-  malusList.forEach(malus => {
-    if (currentRepression >= malus.triggerThreshold && !activeMaluses[malus.id]) {
-      // Créer un élément pour afficher le malus
-      const malusDiv = document.createElement("div");
-      malusDiv.id = malus.id;
-      malusDiv.textContent = malus.label;
-      // Vous pouvez ajouter une classe pour styliser l'affichage des malus, par exemple "malus-item"
-      malusDiv.classList.add("malus-item");
+  
+//   malusList.forEach(malus => {
+//     if (currentRepression >= malus.triggerThreshold && !activeMaluses[malus.id]) {
+//       const malusDiv = document.createElement("div");
+//       malusDiv.id = malus.id;
+//       malusDiv.textContent = malus.label;
+//       malusDiv.classList.add("malus-item");
       
-      // Ajouter l'élément au conteneur
-      malusContainer.appendChild(malusDiv);
+//       malusContainer.appendChild(malusDiv);
       
-      // Marquer ce malus comme actif et prévoir son retrait après la durée définie
-      activeMaluses[malus.id] = setTimeout(() => {
-        malusContainer.removeChild(malusDiv);
-        delete activeMaluses[malus.id];
-      }, malus.duration);
-    }
-  });
-}
+//       activeMaluses[malus.id] = setTimeout(() => {
+//         malusContainer.removeChild(malusDiv);
+//         delete activeMaluses[malus.id];
+//       }, malus.duration);
+//     }
+//   });
+// }
 
-function startMalusCycle() {
-  setInterval(updateDisplay, 1000);
-}
+// function startMalusCycle() {
+//   setInterval(updateDisplay, 1000);
+// }
